@@ -472,135 +472,163 @@ let W,H;
 function resize(){const c=document.getElementById('gameContainer');W=c.offsetWidth;H=c.offsetHeight;canvas.width=W;canvas.height=H;}
 
 // ═══════════════════════════════════════════════════════════
-//  INPUT — CAMERA + MOUSE (dual mode, independent)
+//  INPUT — FACE HEAD TRACKING + MOUSE FALLBACK
 // ═══════════════════════════════════════════════════════════
-let trackedX=.5,trackedY=.5;
-let mouseX=.5,mouseY=.5;
+let trackedX=.5, trackedY=.5;
+let mouseX=.5,   mouseY=.5;
 let useCamera=false;
-let prevPx=null,offCvs=null,offCtx2=null;
-let camSmoothX=.5,camSmoothY=.5;
-let bgModel=null;
+let camSmoothX=.5, camSmoothY=.5;
 
-async function initCamera(){
-  try{
-    const stream=await navigator.mediaDevices.getUserMedia({
-      video:{width:{ideal:640},height:{ideal:480},facingMode:'user'},audio:false
-    });
-    videoEl.srcObject=stream;
-    videoEl.onloadedmetadata=()=>{
-      videoEl.play();
-      offCvs=document.createElement('canvas');
-      offCvs.width =Math.floor(videoEl.videoWidth *.2)||128;
-      offCvs.height=Math.floor(videoEl.videoHeight*.2)||96;
-      offCtx2=offCvs.getContext('2d',{willReadFrequently:true});
-      bgModel=null; prevPx=null;
-      useCamera=true;
-      motInd.style.display='block';
-      document.getElementById('camDot').classList.add('active');
-      document.getElementById('camTxt').textContent='📷 摄像头已连接 — 移动身体控制角色 | 点击模式标签切换';
-      document.getElementById('ctrlMode').textContent='📷 CAM';
-    };
-  }catch(e){
-    document.getElementById('camTxt').textContent='无摄像头 — 鼠标控制';
-    document.getElementById('ctrlMode').textContent='🖱 MOUSE';
-  }
-}
-
-// Mouse/touch — only updates mouseX/Y, does NOT override camera
-canvas.addEventListener('mousemove',ev=>{
+// ── Mouse / touch always available ──
+canvas.addEventListener('mousemove', ev=>{
   const r=canvas.getBoundingClientRect();
   mouseX=(ev.clientX-r.left)/r.width;
   mouseY=(ev.clientY-r.top)/r.height;
 });
-canvas.addEventListener('touchmove',ev=>{
+canvas.addEventListener('touchmove', ev=>{
   ev.preventDefault();
-  const r=canvas.getBoundingClientRect(),t=ev.touches[0];
-  mouseX=(t.clientX-r.left)/r.width;mouseY=(t.clientY-r.top)/r.height;
+  const r=canvas.getBoundingClientRect(), t=ev.touches[0];
+  mouseX=(t.clientX-r.left)/r.width;
+  mouseY=(t.clientY-r.top)/r.height;
 },{passive:false});
 
-// Click mode label to toggle
+// ── Mode toggle (click the label) ──
 document.addEventListener('DOMContentLoaded',()=>{
   const cm=document.getElementById('ctrlMode');
   if(cm){ cm.style.cursor='pointer'; cm.title='点击切换控制方式';
     cm.addEventListener('click',()=>{
-      if(!offCvs)return;
+      if(!videoEl.srcObject)return;
       useCamera=!useCamera;
       motInd.style.display=useCamera?'block':'none';
-      cm.textContent=useCamera?'📷 CAM':'🖱 MOUSE';
+      cm.textContent=useCamera?'📷 人脸追踪':'🖱 MOUSE';
     });
   }
 });
 
-// ── Motion detection: background-model diff centroid ──
-function detectMotion(){
-  if(!offCtx2||videoEl.readyState<2||!useCamera)return;
-  const OW=offCvs.width,OH=offCvs.height;
-
-  offCtx2.save();
-  offCtx2.scale(-1,1);
-  offCtx2.drawImage(videoEl,-OW,0,OW,OH);
-  offCtx2.restore();
-
-  const imgData=offCtx2.getImageData(0,0,OW,OH);
-  const data=imgData.data;
-
-  if(!bgModel){
-    bgModel=new Float32Array(OW*OH*3);
-    for(let i=0,j=0;i<data.length;i+=4,j+=3){
-      bgModel[j]=data[i];bgModel[j+1]=data[i+1];bgModel[j+2]=data[i+2];
-    }
-    prevPx=data.slice();
+// ── Camera + Face Tracking init ──
+async function initCamera(){
+  let stream;
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({
+      video:{width:{ideal:640},height:{ideal:480},facingMode:'user'},
+      audio:false
+    });
+  }catch(e){
+    document.getElementById('camTxt').textContent='无摄像头 — 请使用鼠标控制';
+    document.getElementById('ctrlMode').textContent='🖱 MOUSE';
     return;
   }
+  videoEl.srcObject=stream;
+  await new Promise(r=>{ videoEl.onloadedmetadata=()=>{videoEl.play();r();} });
 
-  const THRESH_FRAME=15;
-  const THRESH_BG=20;
-  const BG_LEARN=0.05;
-
-  let cx=0,cy=0,wsum=0;
-
-  for(let y=0;y<OH;y++){
-    for(let x=0;x<OW;x++){
-      const pi=(y*OW+x)*4;
-      const bi=(y*OW+x)*3;
-      const r=data[pi],g=data[pi+1],b=data[pi+2];
-
-      const dr=Math.abs(r-prevPx[pi]),dg=Math.abs(g-prevPx[pi+1]),db=Math.abs(b-prevPx[pi+2]);
-      const frameDiff=(dr+dg+db)/3;
-
-      const bgr=Math.abs(r-bgModel[bi]),bgg=Math.abs(g-bgModel[bi+1]),bgb=Math.abs(b-bgModel[bi+2]);
-      const bgDiff=(bgr+bgg+bgb)/3;
-
-      let score=0;
-      if(frameDiff>THRESH_FRAME) score+=frameDiff-THRESH_FRAME;
-      if(bgDiff>THRESH_BG)       score+=(bgDiff-THRESH_BG)*0.6;
-
-      if(score>0){ cx+=x*score; cy+=y*score; wsum+=score; }
-
-      if(bgDiff<THRESH_BG*2){
-        bgModel[bi  ]+=(r-bgModel[bi  ])*BG_LEARN;
-        bgModel[bi+1]+=(g-bgModel[bi+1])*BG_LEARN;
-        bgModel[bi+2]+=(b-bgModel[bi+2])*BG_LEARN;
-      }
-    }
+  // Try browser built-in FaceDetector API first (Chrome 72+)
+  if('FaceDetector' in window){
+    try{
+      const fd=new FaceDetector({fastMode:true,maxDetectedFaces:1});
+      // Quick test detect
+      await fd.detect(videoEl);
+      useCamera=true;
+      motInd.style.display='block';
+      document.getElementById('camDot').classList.add('active');
+      document.getElementById('camTxt').textContent='📷 人脸追踪已启动 — 移动头部控制角色 | 点击标签可切换鼠标';
+      document.getElementById('ctrlMode').textContent='📷 人脸追踪';
+      startBrowserFaceLoop(fd);
+      return;
+    }catch(e){}
   }
 
-  prevPx=data.slice();
+  // Fallback: skin-color head tracker (works everywhere, no model needed)
+  useCamera=true;
+  motInd.style.display='block';
+  document.getElementById('camDot').classList.add('active');
+  document.getElementById('camTxt').textContent='📷 头部追踪已启动（肤色模式）— 移动头部控制角色 | 点击标签可切换鼠标';
+  document.getElementById('ctrlMode').textContent='📷 头部追踪';
+  startSkinTrackLoop();
+}
 
-  const MIN_MASS=OW*OH*0.25;
-  if(wsum<MIN_MASS)return;
+// ── Method 1: Browser FaceDetector API ──
+function startBrowserFaceLoop(fd){
+  let busy=false;
+  async function loop(){
+    if(useCamera && !busy && videoEl.readyState>=2){
+      busy=true;
+      try{
+        const faces=await fd.detect(videoEl);
+        if(faces.length>0){
+          const box=faces[0].boundingBox;
+          const vw=videoEl.videoWidth||640, vh=videoEl.videoHeight||480;
+          // Mirror X (front camera is already mirrored in display via CSS, but raw coords are not)
+          const rawX=1-((box.x+box.width/2)/vw);
+          const rawY=(box.y+box.height/2)/vh;
+          smoothAndApply(rawX, rawY);
+        }
+      }catch(e){}
+      busy=false;
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
 
-  const rawX=cx/wsum/OW;
-  const rawY=cy/wsum/OH;
+// ── Method 2: Skin-color blob tracker (head is at top of frame) ──
+// Uses YCbCr skin detection — works for all skin tones under good lighting
+let skinCvs=null, skinCtx=null;
+function startSkinTrackLoop(){
+  skinCvs=document.createElement('canvas');
+  skinCvs.width=160; skinCvs.height=120;
+  skinCtx=skinCvs.getContext('2d',{willReadFrequently:true});
 
-  const ALPHA=0.6; // high = very responsive
-  camSmoothX+=(rawX-camSmoothX)*ALPHA;
-  camSmoothY+=(rawY-camSmoothY)*ALPHA;
+  function loop(){
+    if(useCamera && videoEl.readyState>=2){
+      const SW=skinCvs.width, SH=skinCvs.height;
+      // Draw mirrored frame (so moving head left = player goes left)
+      skinCtx.save(); skinCtx.scale(-1,1);
+      skinCtx.drawImage(videoEl,-SW,0,SW,SH);
+      skinCtx.restore();
 
+      const d=skinCtx.getImageData(0,0,SW,SH).data;
+      let cx=0, cy=0, n=0;
+
+      // Only scan upper 65% of frame — head/face is there for a seated person
+      const yMax=Math.floor(SH*0.65);
+      for(let y=0; y<yMax; y++){
+        for(let x=0; x<SW; x++){
+          const i=(y*SW+x)*4;
+          if(isSkinPixel(d[i],d[i+1],d[i+2])){ cx+=x; cy+=y; n++; }
+        }
+      }
+
+      // Need at least 1% of scanned area to be skin
+      if(n > SW*yMax*0.01){
+        const rawX=cx/n/SW;
+        const rawY=cy/n/SH;
+        smoothAndApply(rawX, rawY);
+      }
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+// YCbCr skin detection (Chai & Ngan, works across skin tones)
+function isSkinPixel(r,g,b){
+  if(r<30&&g<30&&b<30) return false; // too dark
+  if(r>230&&g>230&&b>230) return false; // too bright (background)
+  const Y  =  0.299*r + 0.587*g + 0.114*b;
+  const Cb = -0.169*r - 0.331*g + 0.500*b + 128;
+  const Cr =  0.500*r - 0.419*g - 0.081*b + 128;
+  // Standard skin range in YCbCr
+  return Y>80 && Cb>=77 && Cb<=127 && Cr>=133 && Cr<=173;
+}
+
+// ── Shared smooth + apply ──
+function smoothAndApply(rawX, rawY){
+  const A=0.5; // responsiveness: higher=faster
+  camSmoothX+=(rawX-camSmoothX)*A;
+  camSmoothY+=(rawY-camSmoothY)*A;
   trackedX=camSmoothX;
   trackedY=camSmoothY;
 }
-
 // ═══════════════════════════════════════════════════════════
 //  GAME STATE
 // ═══════════════════════════════════════════════════════════
@@ -620,20 +648,21 @@ function hitboxR(){ return effects.huge>0 ? 22 : 13; }
 //  PLAYER
 // ═══════════════════════════════════════════════════════════
 function updatePlayer(){
-  let tx,ty;
-  if(useCamera){
-    detectMotion(); // every frame, not every 2
-    tx=trackedX;ty=trackedY;
-    if(motInd){motInd.style.left=(trackedX*100)+'%';motInd.style.top=(trackedY*100)+'%';}
-  } else {
-    tx=mouseX;ty=mouseY;
+  // trackedX/Y is updated asynchronously by face/skin tracking loops
+  // mouseX/Y is updated synchronously on mousemove
+  let tx = useCamera ? trackedX : mouseX;
+  let ty = useCamera ? trackedY : mouseY;
+  // Update face indicator dot position
+  if(useCamera && motInd){
+    motInd.style.left=(trackedX*100)+'%';
+    motInd.style.top=(trackedY*100)+'%';
   }
-  // Confuse: flip
-  if(effects.confuse>0){tx=1-tx;ty=1-ty;}
-  // Very fast lerp for camera (0.45), slightly slower for mouse (0.25) to avoid jitter
-  const lerpSpeed = useCamera ? 0.45 : 0.28;
-  player.x+=(tx-player.x)*lerpSpeed;
-  player.y+=(ty-player.y)*lerpSpeed;
+  // Confuse effect: flip directions
+  if(effects.confuse>0){tx=1-tx; ty=1-ty;}
+  // Fast lerp — face tracking already smooth from smoothAndApply()
+  const spd=useCamera ? 0.5 : 0.3;
+  player.x+=(tx-player.x)*spd;
+  player.y+=(ty-player.y)*spd;
   player.x=Math.max(.04,Math.min(.96,player.x));
   player.y=Math.max(.04,Math.min(.96,player.y));
 }
@@ -995,8 +1024,8 @@ function startLevel(lv){
   bossAlive=false;boss=null;
   effects={slow:0,invincible:0,blind:0,fast:0,huge:0,confuse:0};
   invincible=false;invincibleTimer=0;
-  // Reset camera background model so it re-learns the scene
-  bgModel=null; prevPx=null; camSmoothX=.5; camSmoothY=.5;
+  // Reset face tracking smooth position
+  camSmoothX=.5; camSmoothY=.5; trackedX=.5; trackedY=.5;
   document.getElementById('bossBarWrap').classList.remove('vis');
   document.getElementById('effectBanner').classList.remove('show');
   gameState='playing';hideAll();document.getElementById('gameScreen').classList.remove('hidden');
