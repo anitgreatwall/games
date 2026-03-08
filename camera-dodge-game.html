@@ -72,8 +72,25 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 .cor.bl{bottom:5px;left:5px;border-width:0 0 2px 2px}.cor.br{bottom:5px;right:5px;border-width:0 2px 2px 0}
 #motInd{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border:1.5px solid rgba(0,245,255,.22);border-radius:50%;pointer-events:none;z-index:15;display:none;}
 #motInd::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:var(--gc);}
-/* control mode pill */
-#ctrlMode{position:absolute;top:5px;left:50%;transform:translateX(-50%);font-size:.5rem;letter-spacing:.12em;color:rgba(0,245,255,.35);z-index:22;pointer-events:none;}
+/* control mode toggle pill — below HUD, above shield bar */
+#ctrlMode{
+  position:absolute;
+  top:46px; left:50%; transform:translateX(-50%);
+  font-size:.6rem; letter-spacing:.1em;
+  color:var(--cyan);
+  background:rgba(5,8,16,.75);
+  border:1px solid rgba(0,245,255,.4);
+  padding:.18rem .65rem;
+  border-radius:2px;
+  z-index:30;
+  cursor:pointer;
+  pointer-events:all;
+  user-select:none;
+  white-space:nowrap;
+  transition:background .15s, border-color .15s, color .15s;
+  text-shadow:var(--gc);
+}
+#ctrlMode:hover{background:rgba(0,245,255,.15);border-color:rgba(0,245,255,.8);}
 
 /* ── OVERLAYS ── */
 #gameOverScreen,#bossIntroScreen,#levelClearScreen,#victoryScreen{background:rgba(5,8,16,.93);}
@@ -492,18 +509,25 @@ canvas.addEventListener('touchmove', ev=>{
   mouseY=(t.clientY-r.top)/r.height;
 },{passive:false});
 
-// ── Mode toggle (click the label) ──
-document.addEventListener('DOMContentLoaded',()=>{
+// ── Mode toggle pill click — bound immediately (script is at end of body) ──
+(function bindCtrlToggle(){
   const cm=document.getElementById('ctrlMode');
-  if(cm){ cm.style.cursor='pointer'; cm.title='点击切换控制方式';
-    cm.addEventListener('click',()=>{
-      if(!videoEl.srcObject)return;
-      useCamera=!useCamera;
-      motInd.style.display=useCamera?'block':'none';
-      cm.textContent=useCamera?'📷 人脸追踪':'🖱 MOUSE';
-    });
-  }
-});
+  if(!cm)return;
+  cm.addEventListener('click',()=>{
+    // Toggle between camera and mouse
+    useCamera=!useCamera;
+    motInd.style.display=useCamera?'block':'none';
+    if(useCamera){
+      cm.textContent='📷 人脸追踪';
+      cm.style.color='var(--cyan)';
+      cm.style.borderColor='rgba(0,245,255,.5)';
+    } else {
+      cm.textContent='🖱 鼠标控制';
+      cm.style.color='var(--yellow)';
+      cm.style.borderColor='rgba(255,238,0,.5)';
+    }
+  });
+})();
 
 // ── Camera + Face Tracking init ──
 async function initCamera(){
@@ -880,12 +904,18 @@ function fireBossPattern(ph){
   }
 }
 
-// Boss takes 1 HP/sec while player survives
+// Boss takes 1 HP/sec while player survives + score reward
 function updateBossDmg(){
   if(!boss||!bossAlive||boss.deathTimer>=0)return;
   if(frameCount%60===0){
     boss.hp-=1;boss.hitFlash=6;sfxBossHit();updateBossBar();
-    if(boss.hp<=0){boss.hp=0;boss.deathTimer=0;sfxBossDeath();spawnExplosion(boss.x*W,boss.y*H,boss.data.color,55);}
+    score+=50*(currentLevel+1); // 50/100/150 pts per second on boss
+    updateHUD();
+    if(boss.hp<=0){
+      boss.hp=0;boss.deathTimer=0;sfxBossDeath();
+      score+=500*(currentLevel+1); // boss kill bonus
+      spawnExplosion(boss.x*W,boss.y*H,boss.data.color,55);
+    }
   }
 }
 function onBossDead(){document.getElementById('bossBarWrap').classList.remove('vis');showLevelClear();}
@@ -973,10 +1003,23 @@ function drawBlind(){
 function calcSpawnRate(){return Math.max(10,46-wave*3);}
 function updateNormalWave(){
   waveTimer++;spawnTimer++;
-  if(spawnTimer>=calcSpawnRate()){spawnWaveBullet();sfxBullet(false);if(wave>=2&&Math.random()<.3)spawnWaveBullet();spawnTimer=0;}
-  score+=1;
-  if(waveTimer>420){wave++;waveTimer=0;spawnExplosion(W/2,H/2,'#00f5ff',12);if(wave>3){bullets=[];isBossPhase=true;spawnBoss(currentLevel);}updateHUD();}
-  if(frameCount%30===0)updateHUD();
+  if(spawnTimer>=calcSpawnRate()){
+    spawnWaveBullet();sfxBullet(false);
+    if(wave>=2&&Math.random()<.3)spawnWaveBullet();
+    spawnTimer=0;
+    // +10 pts per bullet dodged (spawned and player survived it)
+    score+=10;
+  }
+  // +1 pt per frame survived = ~60/sec, scaled by wave
+  if(frameCount%4===0) score+= wave;
+  if(waveTimer>420){
+    wave++;waveTimer=0;
+    score+=200; // wave clear bonus
+    spawnExplosion(W/2,H/2,'#00f5ff',12);
+    if(wave>3){bullets=[];isBossPhase=true;spawnBoss(currentLevel);}
+    updateHUD();
+  }
+  if(frameCount%20===0)updateHUD();
 }
 
 // ═══════════════════════════════════════════════════════════
