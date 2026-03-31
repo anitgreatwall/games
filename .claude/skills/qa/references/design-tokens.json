@@ -1,0 +1,76 @@
+{
+  "fonts": {
+    "allowed": ["DM Sans", "JetBrains Mono"],
+    "systemFallbacks": ["-apple-system", "BlinkMacSystemFont", "sans-serif", "monospace", "system-ui"]
+  },
+  "colors": {
+    "brand": {
+      "navy": "#1F4E79",
+      "navyDark": "#17395c",
+      "blue": "#2E75B6",
+      "light": "#D6E4F0"
+    },
+    "lightMode": {
+      "bgBase": "#FFFFFF",
+      "bgCard": "#F8FAFC",
+      "bgPage": "#f0f2f5",
+      "bgInset": "#f8fafc",
+      "bgSubtle": "#f1f5f9",
+      "textPrimary": "#0F172A",
+      "textSecondary": "#475569",
+      "textMuted": "#94a3b8",
+      "textFaint": "#cbd5e1",
+      "border": "#E2E8F0",
+      "borderStrong": "#cbd5e1",
+      "borderSubtle": "#f1f5f9"
+    },
+    "status": {
+      "active": "#a3e635",
+      "warning": "#fbbf24",
+      "critical": "#ef4444",
+      "complete": "#10b981",
+      "pending": "#94a3b8",
+      "info": "#38bdf8"
+    },
+    "semantic": {
+      "green": "#16a34a",
+      "greenBg": "#f0fdf4",
+      "greenBorder": "#86efac",
+      "amber": "#d97706",
+      "amberBg": "#fffbeb",
+      "amberBorder": "#fde68a",
+      "red": "#dc2626",
+      "redBg": "#fef2f2",
+      "redBorder": "#fecaca",
+      "blueBg": "rgba(31,78,121,0.06)",
+      "blueBorder": "rgba(31,78,121,0.15)"
+    },
+    "entity": {
+      "redoeWindsor": "#2E75B6",
+      "redoeHunan": "#F59E0B",
+      "pes": "#10B981",
+      "pangeoCorp": "#8B5CF6"
+    }
+  },
+  "spacing": {
+    "baseGrid": 4,
+    "standardPadding": 16,
+    "cardGap": 24
+  },
+  "touchTargets": {
+    "minimum": 44,
+    "shopFloorPrimary": 56
+  },
+  "contrast": {
+    "minimumRatio": 4.5
+  },
+  "radius": {
+    "xs": 4,
+    "sm": 6,
+    "default": 8,
+    "lg": 12,
+    "button": 8,
+    "card": 12,
+    "badge": 9999
+  }
+}

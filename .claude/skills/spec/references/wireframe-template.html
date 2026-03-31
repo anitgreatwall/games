@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wireframe — SPEC-NNN</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --navy: #1F4E79; --blue: #2E75B6; --light: #D6E4F0;
+    --bg: #FFFFFF; --card: #F8FAFC; --inset: #F1F5F9;
+    --border: #E2E8F0; --border-dash: #CBD5E1;
+    --text: #0F172A; --text-sec: #475569; --text-muted: #94A3B8;
+    --green: #22C55E; --amber: #F59E0B; --red: #EF4444;
+    --wf-fill: #F1F5F9; --wf-border: #CBD5E1;
+    --font: 'DM Sans', sans-serif; --mono: 'JetBrains Mono', monospace;
+  }
+  body { font-family: var(--font); background: #F8FAFC; color: var(--text); min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 24px; }
+
+  /* Banner */
+  .wf-banner { width: 100%; max-width: var(--viewport); background: #FEF3C7; border: 2px solid #F59E0B; border-radius: 8px; padding: 10px 20px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700; color: #92400E; }
+  .wf-banner svg { flex-shrink: 0; }
+
+  /* Viewport container */
+  .wf-viewport { width: 100%; max-width: var(--viewport); background: white; border: 2px dashed var(--wf-border); border-radius: 12px; overflow: hidden; position: relative; }
+  .wf-viewport-label { position: absolute; top: 8px; right: 12px; font-family: var(--mono); font-size: 10px; color: var(--text-muted); background: white; padding: 2px 8px; border-radius: 4px; border: 1px solid var(--border); z-index: 10; }
+
+  /* Wireframe blocks */
+  .wf-header { background: var(--wf-fill); border-bottom: 2px dashed var(--wf-border); padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .wf-kpi-strip { display: grid; grid-template-columns: repeat(var(--kpi-cols, 3), 1fr); gap: 12px; padding: 16px 24px; }
+  .wf-kpi { background: var(--wf-fill); border: 1px dashed var(--wf-border); border-radius: 8px; padding: 16px; text-align: center; }
+  .wf-kpi-label { font-family: var(--mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .wf-kpi-value { font-family: var(--mono); font-size: 24px; font-weight: 700; color: var(--navy); }
+  .wf-card-grid { display: grid; grid-template-columns: repeat(var(--card-cols, 3), 1fr); gap: 12px; padding: 16px 24px; }
+  .wf-card { background: var(--wf-fill); border: 1px dashed var(--wf-border); border-radius: 12px; padding: 20px; min-height: 120px; display: flex; align-items: center; justify-content: center; font-size: 13px; color: var(--text-muted); font-weight: 500; }
+  .wf-card-hero { grid-column: 1 / -1; border: 2px dashed var(--navy); background: rgba(31,78,121,0.04); }
+  .wf-data-table { margin: 16px 24px; border: 1px dashed var(--wf-border); border-radius: 8px; overflow: hidden; }
+  .wf-data-table .wf-row { display: grid; grid-template-columns: var(--table-cols, 2fr 1fr 1fr); padding: 12px 16px; border-bottom: 1px dashed var(--border); font-size: 13px; color: var(--text-sec); }
+  .wf-data-table .wf-row-header { background: var(--wf-fill); font-weight: 600; font-family: var(--mono); font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .wf-action-bar { padding: 16px 24px; display: flex; gap: 10px; }
+  .wf-btn { flex: 1; height: 56px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; border: none; cursor: default; }
+  .wf-btn-primary { background: var(--navy); color: white; }
+  .wf-btn-success { background: var(--green); color: white; }
+  .wf-btn-outline { background: white; color: var(--text-sec); border: 1px dashed var(--wf-border); }
+  .wf-sidebar { width: 248px; border-right: 2px dashed var(--wf-border); background: var(--wf-fill); padding: 20px 16px; flex-shrink: 0; }
+  .wf-section-label { font-family: var(--mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 24px; font-weight: 600; }
+  .wf-placeholder { background: var(--wf-fill); border: 1px dashed var(--wf-border); border-radius: 8px; padding: 32px; text-align: center; margin: 16px 24px; color: var(--text-muted); font-size: 14px; }
+
+  /* Touch target overlays */
+  .wf-touch-44 { position: relative; }
+  .wf-touch-44::after { content: '44px'; position: absolute; top: -2px; right: -2px; font-family: var(--mono); font-size: 8px; background: rgba(239,68,68,0.15); color: var(--red); padding: 1px 4px; border-radius: 3px; }
+  .wf-touch-56 { position: relative; }
+  .wf-touch-56::after { content: '56px'; position: absolute; top: -2px; right: -2px; font-family: var(--mono); font-size: 8px; background: rgba(239,68,68,0.15); color: var(--red); padding: 1px 4px; border-radius: 3px; }
+
+  /* Flow indicator */
+  .wf-flow { padding: 16px 24px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); font-family: var(--mono); }
+  .wf-flow-arrow { color: var(--navy); font-weight: 700; }
+  .wf-flow-step { padding: 4px 12px; border-radius: 6px; border: 1px solid var(--border); background: white; }
+  .wf-flow-step.active { background: var(--navy); color: white; border-color: var(--navy); }
+</style>
+</head>
+<body>
+<!--
+  WIREFRAME TEMPLATE — Redoe OS
+
+  Usage:
+  1. Set --viewport CSS variable on .wf-viewport (768px for kiosk, 1024px for tablet, 1280px for desktop)
+  2. Replace placeholder content with screen-specific blocks
+  3. Use .wf-card-hero for the primary element (e.g., "YOU" card)
+  4. Add .wf-touch-44 or .wf-touch-56 to interactive elements to show touch target zones
+  5. Use .wf-flow to show screen-to-screen navigation
+
+  Delete this comment and the example below when building a real wireframe.
+-->
+
+<div class="wf-banner">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  WIREFRAME — SPEC-NNN — NOT FINAL DESIGN
+</div>
+
+<!-- Example: Shop Floor kiosk (768px) -->
+<div class="wf-viewport" style="--viewport: 768px">
+  <span class="wf-viewport-label">768px · Shop Floor Kiosk</span>
+
+  <div class="wf-header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:32px;height:32px;background:var(--navy);border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:14px">R</div>
+      <div>
+        <div style="font-weight:700;font-size:18px">Page Title</div>
+        <div style="font-size:13px;color:var(--text-muted)">Subtitle · Context</div>
+      </div>
+    </div>
+    <div style="font-family:var(--mono);font-size:28px;font-weight:700;color:var(--navy)">10:30 PM</div>
+  </div>
+
+  <div class="wf-card-grid" style="--card-cols: 1">
+    <div class="wf-card wf-card-hero wf-touch-56">[YOUR CARD — full width, 56px action buttons]</div>
+  </div>
+
+  <div class="wf-section-label">Department · 3/6 Active</div>
+
+  <div class="wf-card-grid" style="--card-cols: 3">
+    <div class="wf-card">[Employee Card]</div>
+    <div class="wf-card">[Employee Card]</div>
+    <div class="wf-card">[Employee Card]</div>
+  </div>
+
+  <div class="wf-flow">
+    <span class="wf-flow-step active">Badge Scan</span>
+    <span class="wf-flow-arrow">→</span>
+    <span class="wf-flow-step">Attendance</span>
+    <span class="wf-flow-arrow">→</span>
+    <span class="wf-flow-step">Allocate</span>
+    <span class="wf-flow-arrow">→</span>
+    <span class="wf-flow-step">Submit</span>
+  </div>
+</div>
+
+</body>
+</html>

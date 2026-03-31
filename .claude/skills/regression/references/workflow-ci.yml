@@ -1,0 +1,149 @@
+# =============================================================================
+# Redoe OS — CI Pipeline
+# Runs on every PR to main. Covers lint, type-check, tests, and database QA.
+# =============================================================================
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Frontend: Lint, Type-check, Unit Tests
+  # ─────────────────────────────────────────────
+  frontend:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm turbo run lint type-check test
+
+  # ─────────────────────────────────────────────
+  # Database: Schema Guardian + pgTAP + RLS Audit
+  # ─────────────────────────────────────────────
+  database:
+    name: Database QA
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    if: contains(github.event.pull_request.changed_files, 'supabase/') || github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      # Schema Guardian (bash, no API cost)
+      - name: Schema Guardian
+        run: bash .github/scripts/schema-guardian.sh
+
+      # Start Supabase + run pgTAP
+      - name: Start Supabase
+        run: supabase start
+
+      - name: Apply migrations
+        run: supabase db reset
+
+      - name: pgTAP Tests
+        run: supabase test db
+
+      # RLS Audit
+      - name: RLS Audit
+        run: |
+          NO_RLS=$(psql "postgresql://postgres:postgres@127.0.0.1:54322/postgres" -t -A -c "
+            SELECT relname FROM pg_class c
+            JOIN pg_namespace n ON n.oid = c.relnamespace
+            WHERE n.nspname = 'public' AND c.relkind = 'r'
+            AND NOT c.relrowsecurity
+            AND relname NOT IN (
+              'departments','shifts','indirect_codes','break_types',
+              'scrap_reasons','downtime_reasons','sync_state',
+              'machine_monitoring_config','audit_log'
+            );
+          ")
+          if [ -n "$NO_RLS" ]; then
+            echo "::error::Tables WITHOUT RLS: $NO_RLS"
+            exit 1
+          fi
+
+      # Type freshness
+      - name: Type Freshness
+        run: |
+          supabase gen types typescript --local > /tmp/types_check.ts
+          if ! diff -q packages/types/database.ts /tmp/types_check.ts > /dev/null 2>&1; then
+            echo "::error::TypeScript types are stale. Run 'supabase gen types' and commit."
+            exit 1
+          fi
+
+      - name: Stop Supabase
+        if: always()
+        run: supabase stop
+
+  # ─────────────────────────────────────────────
+  # E2E: Playwright (only on frontend changes)
+  # ─────────────────────────────────────────────
+  e2e:
+    name: E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    if: contains(github.event.pull_request.changed_files, 'apps/web/')
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - run: pnpm install --frozen-lockfile
+      - run: supabase start && supabase db reset
+      - run: pnpm turbo run build --filter=web
+      - run: pnpm --filter web exec playwright install --with-deps chromium
+      - run: pnpm --filter web exec playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 7
+
+      - if: always()
+        run: supabase stop

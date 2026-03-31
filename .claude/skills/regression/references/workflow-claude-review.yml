@@ -1,0 +1,98 @@
+# =============================================================================
+# Redoe OS — Claude Code Review
+# Runs on every PR. Advisory only — does not block merge.
+# =============================================================================
+
+name: Claude Review
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  review:
+    name: Code Review + Security
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          model: claude-sonnet-4-20250514
+          direct_prompt: |
+            You are reviewing a PR for Redoe OS, a manufacturing MES for Redoe Windsor.
+            Team: Steve (VP), Andy (backend), Kevin (frontend), Ben Wang. Non-professional developers.
+
+            ## Review Checklist
+
+            ### Database (supabase/)
+            - RLS enabled on new tables with tier-appropriate policies
+            - snake_case naming, enums lowercase
+            - Audit triggers on business data tables
+            - No SECURITY DEFINER unless justified
+            - No breaking changes (DROP TABLE/COLUMN) without approval
+
+            ### Frontend (apps/web/)
+            - shadcn/ui components only, CSS variables for colors
+            - font-mono on numbers/codes/job IDs
+            - No financial data exposed to shop floor role
+            - F738 = "Work Order" in all UI
+            - Types from @redoe-os/types (never hand-written)
+
+            ### Security
+            - No secrets (API keys, service_role, connection strings)
+            - No .env files committed
+            - Parameterized queries only
+
+            ### CODEOWNERS
+            - supabase/ changes require Steve or Andy
+            - Kevin must NOT author supabase/ changes
+
+            ## Output Format
+            1. Summary (2-3 sentences)
+            2. Must Fix / Should Fix / Suggestions
+            3. Security concerns
+            4. Verdict: APPROVE / REQUEST CHANGES / COMMENT
+
+            Be direct and concise.
+          max_tokens: 4096
+          allowed_tools: "Read,Bash,Glob,Grep"
+
+  # Weekly security audit (cron)
+  security-audit:
+    name: Weekly Security Audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: github.event_name == 'schedule'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - run: supabase start && supabase db reset
+
+      - name: RLS Audit
+        run: bash .claude/skills/security-audit/scripts/rls_audit.sh
+
+      - name: Secrets Scan
+        run: bash .claude/skills/security-audit/scripts/secrets_scan.sh .
+
+      - name: Dependency Audit
+        run: pnpm audit --audit-level=high || true
+
+      - if: always()
+        run: supabase stop
