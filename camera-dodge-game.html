@@ -74,6 +74,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 #motInd::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:var(--gc);}
 /* control mode toggle pill — below HUD, above shield bar */
 #ctrlMode{
+  display:none;            /* arcade is mouse-only — no camera/mouse toggle */
   position:absolute;
   top:46px; left:50%; transform:translateX(-50%);
   font-size:.6rem; letter-spacing:.1em;
@@ -111,7 +112,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 #potionToast.show{opacity:1;}
 
 /* camera status */
-#camStatus{position:fixed;bottom:.55rem;left:50%;transform:translateX(-50%);font-size:.6rem;letter-spacing:.1em;color:rgba(0,245,255,.26);z-index:200;}
+#camStatus{display:none;position:fixed;bottom:.55rem;left:50%;transform:translateX(-50%);font-size:.6rem;letter-spacing:.1em;color:rgba(0,245,255,.26);z-index:200;}
 .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#ff2244;margin-right:4px;animation:blink 1s infinite;box-shadow:var(--gr);vertical-align:middle;}
 .dot.active{background:#00ff88;box-shadow:var(--gg);}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
@@ -226,7 +227,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 <!-- START (arcade — now gated behind home) -->
 <div id="startScreen" class="screen hidden">
   <div class="game-title">DODGE<br><span>FIRE</span></div>
-  <div class="subtitle">摄像头 / 鼠标 · 三关Boss · 药水盲盒</div>
+  <div class="subtitle">鼠标操作 · 三关Boss · 药水盲盒</div>
   <div class="level-strip">
     <div class="lc"><div class="ln">LEVEL 01</div><div class="lb">🤖</div><div class="lname">机械哨兵</div><div class="ldesc">蓝色能量弹<br>螺旋+扇射</div></div>
     <div class="lc"><div class="ln">LEVEL 02</div><div class="lb">👁️</div><div class="lname">深渊之眼</div><div class="ldesc">紫色追踪激光<br>旋转弹墙</div></div>
@@ -234,8 +235,7 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   </div>
   <div class="instr">
     <div class="how-l">// HOW TO PLAY</div>
-    <div class="tr"><span class="ico">📷</span><span>摄像头追踪身体位置控制角色</span></div>
-    <div class="tr"><span class="ico">🖱️</span><span>也可直接用<b>鼠标</b>控制角色移动</span></div>
+    <div class="tr"><span class="ico">🖱️</span><span>移动<b>鼠标 / 手指</b>控制角色躲避</span></div>
     <div class="tr"><span class="ico">🧪</span><span>拾取药水盲盒 — 好坏全靠运气！</span></div>
     <div class="tr"><span class="ico">⚔️</span><span>坚持存活消耗Boss血量通关</span></div>
     <div class="tr"><span class="ico">❤️</span><span>3条命，护盾清零扣一命</span></div>
@@ -1305,7 +1305,8 @@ function fullReset(){score=0;lives=3;health=100;invincible=false;invincibleTimer
 // ═══════════════════════════════════════════════════════════
 document.getElementById('startBtn').addEventListener('click',async()=>{
   try{ac().resume();}catch(e){}
-  await initCamera();fullReset();showBossIntro(0);
+  useCamera=false;            // arcade is mouse/touch only — head tracking lives in rehab mode
+  fullReset();showBossIntro(0);
 });
 document.getElementById('bossStartBtn').addEventListener('click',()=>startLevel(currentLevel));
 document.getElementById('nextLvlBtn').addEventListener('click',()=>showBossIntro(currentLevel+1));
