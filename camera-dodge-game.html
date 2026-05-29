@@ -115,12 +115,116 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 .dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#ff2244;margin-right:4px;animation:blink 1s infinite;box-shadow:var(--gr);vertical-align:middle;}
 .dot.active{background:#00ff88;box-shadow:var(--gg);}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* ═══════════════════════════════════════════════════════════
+   CERVICAL REHAB — added on top of the original arcade
+   Clinical theme: calm teal/green, slow motion, no time pressure
+   ═══════════════════════════════════════════════════════════ */
+#homeScreen{background:radial-gradient(ellipse at 50% 38%,rgba(0,255,136,.06),var(--bg) 72%);overflow-y:auto;padding:1.5rem 1rem;gap:0;}
+.home-tag{font-size:.7rem;letter-spacing:.3em;color:rgba(0,255,136,.5);margin-top:.4rem;text-align:center;text-transform:uppercase;}
+.home-cards{display:flex;gap:1rem;margin-top:1.6rem;flex-wrap:wrap;justify-content:center;}
+.hcard{width:min(80vw,300px);padding:1.4rem 1.2rem;border:1px solid rgba(0,255,136,.22);background:rgba(0,255,136,.03);text-align:center;cursor:pointer;transition:all .2s;}
+.hcard:hover{background:rgba(0,255,136,.08);border-color:rgba(0,255,136,.5);transform:translateY(-3px);}
+.hcard.arcade{border-color:rgba(255,34,68,.22);background:rgba(255,34,68,.03);}
+.hcard.arcade:hover{background:rgba(255,34,68,.08);border-color:rgba(255,34,68,.5);}
+.hcard .hi{font-size:2.6rem;}
+.hcard .ht{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:var(--green);margin-top:.5rem;letter-spacing:.06em;}
+.hcard.arcade .ht{color:var(--red);}
+.hcard .hd{font-size:.66rem;color:rgba(0,245,255,.5);line-height:1.7;margin-top:.5rem;}
+.med-note{margin-top:1.4rem;max-width:min(86vw,480px);font-size:.6rem;line-height:1.7;color:rgba(0,245,255,.34);text-align:center;border-top:1px solid rgba(0,245,255,.1);padding-top:.8rem;}
+
+/* generic rehab panel screen */
+.rh-screen{background:radial-gradient(ellipse at 50% 30%,rgba(0,255,136,.05),var(--bg) 75%);overflow-y:auto;padding:1.4rem 1rem;}
+.rh-h1{font-family:'Orbitron',sans-serif;font-size:clamp(1.3rem,3.6vw,2.2rem);font-weight:900;color:var(--green);text-shadow:var(--gg);letter-spacing:.04em;text-align:center;}
+.rh-sub{font-size:.72rem;letter-spacing:.14em;color:rgba(0,245,255,.5);margin-top:.5rem;text-align:center;max-width:min(88vw,520px);line-height:1.8;}
+.rh-panel{margin-top:1.2rem;width:min(90vw,540px);border:1px solid rgba(0,245,255,.14);background:rgba(0,245,255,.022);padding:1rem 1.2rem;}
+.rh-row{display:flex;align-items:flex-start;gap:.7rem;font-size:.76rem;color:rgba(0,245,255,.7);line-height:1.6;padding:.45rem 0;border-bottom:1px solid rgba(0,245,255,.06);}
+.rh-row:last-child{border-bottom:none;}
+.rh-row input[type=checkbox]{margin-top:.2rem;width:16px;height:16px;accent-color:var(--green);flex-shrink:0;cursor:pointer;}
+.rh-btn-row{display:flex;gap:.8rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center;}
+.btn.green{border-color:var(--green);color:var(--green);text-shadow:var(--gg);box-shadow:var(--gg);}
+.btn.green::before{background:var(--green);}
+.btn.ghost{border-color:rgba(0,245,255,.3);color:rgba(0,245,255,.6);box-shadow:none;text-shadow:none;}
+.btn.ghost::before{background:rgba(0,245,255,.3);}
+.btn.sm{padding:.5rem 1.3rem;font-size:.72rem;margin-top:0;}
+.warn-box{margin-top:1rem;width:min(90vw,540px);border:1px solid rgba(255,238,0,.4);background:rgba(255,238,0,.05);padding:.9rem 1.1rem;font-size:.72rem;color:var(--yellow);line-height:1.7;}
+.danger-box{border-color:rgba(255,34,68,.5);background:rgba(255,34,68,.06);color:var(--red);}
+
+/* module menu cards */
+.mod-grid{display:flex;gap:.8rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center;max-width:min(94vw,720px);}
+.modc{width:160px;padding:1rem .7rem;border:1px solid rgba(0,245,255,.16);background:rgba(0,245,255,.03);text-align:center;cursor:pointer;transition:all .18s;position:relative;}
+.modc:hover{background:rgba(0,255,136,.07);border-color:rgba(0,255,136,.45);transform:translateY(-2px);}
+.modc.locked{opacity:.4;cursor:not-allowed;}
+.modc.locked:hover{transform:none;background:rgba(0,245,255,.03);border-color:rgba(0,245,255,.16);}
+.modc .mi{font-size:1.8rem;}
+.modc .mn{font-family:'Orbitron',sans-serif;font-size:.66rem;font-weight:700;color:var(--cyan);margin-top:.4rem;}
+.modc .md{font-size:.56rem;color:rgba(0,245,255,.45);margin-top:.35rem;line-height:1.6;}
+.modc .mlock{position:absolute;top:.3rem;right:.4rem;font-size:.7rem;}
+
+/* the live training stage */
+#rehabStage{background:transparent;z-index:10;}
+.rh-stage-wrap{position:relative;width:min(92vw,820px);aspect-ratio:4/3;}
+#rhVideo{width:100%;height:100%;object-fit:cover;transform:scaleX(-1);filter:brightness(.5) saturate(.6) hue-rotate(90deg);border:1px solid rgba(0,255,136,.22);}
+#rhCanvas{position:absolute;inset:0;width:100%;height:100%;}
+.rh-topbar{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:flex-start;padding:.5rem .7rem;z-index:20;background:linear-gradient(to bottom,rgba(5,8,16,.85),transparent);pointer-events:none;}
+.rh-topbar .tb{display:flex;flex-direction:column;gap:1px;}
+.rh-topbar .tl{font-size:.46rem;letter-spacing:.2em;color:rgba(0,255,136,.4);text-transform:uppercase;}
+.rh-topbar .tv{font-family:'Orbitron',sans-serif;font-size:1rem;font-weight:700;color:var(--green);text-shadow:var(--gg);}
+#rhInstruction{position:absolute;top:46px;left:50%;transform:translateX(-50%);width:84%;text-align:center;font-size:.92rem;letter-spacing:.04em;color:#eaffff;text-shadow:0 0 8px rgba(0,255,136,.5);z-index:21;pointer-events:none;line-height:1.5;}
+#rhSubInstruction{position:absolute;top:calc(46px + 2.4rem);left:50%;transform:translateX(-50%);width:84%;text-align:center;font-size:.68rem;color:rgba(0,245,255,.6);z-index:21;pointer-events:none;}
+#rhSlowWarn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Orbitron',sans-serif;font-size:1.1rem;font-weight:700;color:var(--yellow);text-shadow:var(--gy);z-index:23;opacity:0;transition:opacity .15s;pointer-events:none;letter-spacing:.1em;}
+#rhSlowWarn.show{opacity:1;}
+.rh-bottombar{position:absolute;bottom:0;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:1.4rem;padding:.55rem;z-index:22;background:linear-gradient(to top,rgba(5,8,16,.88),transparent);}
+.rh-bottombar .bb{text-align:center;}
+.rh-bottombar .bl{font-size:.46rem;letter-spacing:.2em;color:rgba(0,245,255,.4);text-transform:uppercase;}
+.rh-bottombar .bv{font-family:'Orbitron',sans-serif;font-size:1.05rem;font-weight:700;color:var(--cyan);}
+#rhStopBtn{position:absolute;top:.5rem;right:.6rem;z-index:30;font-size:.62rem;letter-spacing:.1em;color:var(--red);background:rgba(5,8,16,.7);border:1px solid rgba(255,34,68,.5);padding:.22rem .7rem;border-radius:2px;cursor:pointer;pointer-events:all;}
+#rhStopBtn:hover{background:rgba(255,34,68,.15);}
+
+/* live angle readout (debug/biofeedback) */
+#rhAngles{position:absolute;bottom:42px;left:.6rem;z-index:21;font-size:.56rem;line-height:1.5;color:rgba(0,255,136,.55);pointer-events:none;font-family:'Share Tech Mono',monospace;}
+
+/* symptom-check + generic modal */
+.rh-modal{position:fixed;inset:0;background:rgba(5,8,16,.92);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;}
+.rh-modal.hidden{display:none;}
+.rh-modal .mq{font-size:1rem;color:#eaffff;text-align:center;max-width:min(88vw,460px);line-height:1.7;margin-bottom:1.3rem;}
+
+/* report */
+.rep-grid{display:flex;gap:.8rem;margin-top:1.2rem;flex-wrap:wrap;justify-content:center;max-width:min(94vw,760px);}
+.repc{width:150px;padding:.9rem .6rem;border:1px solid rgba(0,255,136,.18);background:rgba(0,255,136,.03);text-align:center;}
+.repc .rl{font-size:.5rem;letter-spacing:.16em;color:rgba(0,245,255,.4);text-transform:uppercase;}
+.repc .rv{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:700;color:var(--green);margin:.25rem 0;}
+.repc .ru{font-size:.5rem;color:rgba(0,245,255,.4);}
+.repc .rtrend{font-size:.58rem;margin-top:.3rem;}
+.rtrend.up{color:var(--green);}.rtrend.down{color:var(--red);}.rtrend.flat{color:rgba(0,245,255,.4);}
+.spark{display:block;margin:.3rem auto 0;}
 </style>
 </head>
 <body>
 
-<!-- START -->
-<div id="startScreen" class="screen">
+<!-- HOME (new entry point) -->
+<div id="homeScreen" class="screen">
+  <div class="game-title" style="color:var(--green);text-shadow:var(--gg),0 0 80px #00ff8833;">颈椎<br><span style="color:var(--cyan);text-shadow:var(--gc);">康复</span></div>
+  <div class="home-tag">CERVICAL REHAB · 头部姿态控制训练</div>
+  <div class="home-cards">
+    <div class="hcard" id="goRehab">
+      <div class="hi">🧘</div>
+      <div class="ht">康复训练</div>
+      <div class="hd">基于临床循证的颈椎活动度、深层屈肌、本体感觉与凝视稳定训练。缓慢、可控、无伤害。</div>
+    </div>
+    <div class="hcard arcade" id="goArcade">
+      <div class="hi">🎮</div>
+      <div class="ht">街机模式</div>
+      <div class="hd">原版 DODGE FIRE 弹幕躲避。娱乐向、节奏快 — 不属于康复训练，进入前需确认。</div>
+    </div>
+  </div>
+  <div class="med-note">
+    本程序为健康/运动辅助工具，<b>不能替代医生或物理治疗师的诊断与处方</b>。如有外伤、眩晕、上肢放射痛、骨质疏松或类风湿等情况，请先就医。训练中出现疼痛或头晕应立即停止。
+  </div>
+</div>
+
+<!-- START (arcade — now gated behind home) -->
+<div id="startScreen" class="screen hidden">
   <div class="game-title">DODGE<br><span>FIRE</span></div>
   <div class="subtitle">摄像头 / 鼠标 · 三关Boss · 药水盲盒</div>
   <div class="level-strip">
@@ -198,6 +302,109 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
 <div id="potionToast"></div>
 <div id="camStatus"><span class="dot" id="camDot"></span><span id="camTxt">等待摄像头...</span></div>
+
+<!-- ═══════════════ REHAB SCREENS ═══════════════ -->
+
+<!-- ONBOARDING: population + consent -->
+<div id="rhOnboard" class="screen rh-screen hidden">
+  <div class="rh-h1">开始之前</div>
+  <div class="rh-sub">选择你的情况，我们会据此调整训练强度与安全保护。</div>
+  <div class="home-cards" style="margin-top:1.4rem;">
+    <div class="hcard" id="popGeneral">
+      <div class="hi">💪</div>
+      <div class="ht" style="color:var(--cyan)">保健 / 防"手机颈"</div>
+      <div class="hd">无明显颈痛，想改善姿势、活动度与久坐僵硬。</div>
+    </div>
+    <div class="hcard" id="popPatient">
+      <div class="hi">🩺</div>
+      <div class="ht" style="color:var(--yellow)">颈痛 / 康复期</div>
+      <div class="hd">有非特异性颈痛或正在恢复。将启用红旗筛查与更保守的剂量。</div>
+    </div>
+  </div>
+  <div class="med-note">点击即表示你已阅读并理解：本工具不替代专业医疗意见，训练自愿且风险自负。</div>
+  <div class="rh-btn-row"><button class="btn ghost sm" id="rhOnboardBack">← 返回</button></div>
+</div>
+
+<!-- SAFETY SCREENING (patient mode) -->
+<div id="rhScreen" class="screen rh-screen hidden">
+  <div class="rh-h1" style="color:var(--yellow);text-shadow:var(--gy)">安全筛查</div>
+  <div class="rh-sub">勾选任何一项<b>符合你当前情况</b>的描述（红旗征）。这些情况下应先就医，部分训练将被限制。</div>
+  <div class="rh-panel">
+    <label class="rh-row"><input type="checkbox" data-flag="trauma"><span>近期头颈外伤、车祸或挥鞭样损伤</span></label>
+    <label class="rh-row"><input type="checkbox" data-flag="dizzy"><span>转头或体位改变时出现头晕 / 眩晕 / 恶心</span></label>
+    <label class="rh-row"><input type="checkbox" data-flag="radicular"><span>放射到手臂的麻木、刺痛或无力</span></label>
+    <label class="rh-row"><input type="checkbox" data-flag="bone"><span>骨质疏松、类风湿关节炎或已知颈椎不稳</span></label>
+    <label class="rh-row"><input type="checkbox" data-flag="severe"><span>剧烈或持续加重的颈痛、夜间痛、不明原因体重下降</span></label>
+    <label class="rh-row"><input type="checkbox" data-flag="none"><span>以上都没有</span></label>
+  </div>
+  <div class="warn-box hidden" id="rhFlagWarn">⚠ 你勾选了红旗征。强烈建议先咨询医生或物理治疗师。高强度模块已被锁定，仅保留低强度的活动度与本体感觉训练，且全程在无痛范围内进行。</div>
+  <div class="rh-btn-row">
+    <button class="btn ghost sm" id="rhScreenBack">← 返回</button>
+    <button class="btn green sm" id="rhScreenNext">继续 →</button>
+  </div>
+</div>
+
+<!-- MODULE MENU -->
+<div id="rhMenu" class="screen rh-screen hidden">
+  <div class="rh-h1">训练菜单</div>
+  <div class="rh-sub" id="rhMenuSub">先完成校准（中立位 + 无痛活动范围），再选择训练模块。</div>
+  <div class="rh-btn-row" style="margin-top:1rem;">
+    <button class="btn green sm" id="rhCalibBtn">🎯 校准 / 重新校准</button>
+  </div>
+  <div class="mod-grid" id="rhModGrid">
+    <div class="modc locked" data-mod="warmup"><span class="mlock">🔒</span><div class="mi">🌅</div><div class="mn">热身</div><div class="md">各方向小幅缓慢活动，预备颈部</div></div>
+    <div class="modc locked" data-mod="rom"><span class="mlock">🔒</span><div class="mi">🧭</div><div class="mn">活动度 ROM</div><div class="md">缓慢转向目标并保持，奖励平滑</div></div>
+    <div class="modc locked" data-mod="chintuck"><span class="mlock">🔒</span><div class="mi">📐</div><div class="mn">收下巴 CCF</div><div class="md">深层颈屈肌：保持 10s × 多次</div></div>
+    <div class="modc locked" data-mod="proprio"><span class="mlock">🔒</span><div class="mi">🎯</div><div class="mn">本体感觉</div><div class="md">闭眼回到中立位，测关节定位误差</div></div>
+    <div class="modc locked" data-mod="gaze"><span class="mlock">🔒</span><div class="mi">👁️</div><div class="mn">凝视稳定</div><div class="md">注视固定点缓慢转头，眼-头协调</div></div>
+  </div>
+  <div class="warn-box hidden" id="rhTrackWarn"></div>
+  <div class="rh-btn-row">
+    <button class="btn ghost sm" id="rhMenuBack">← 主页</button>
+    <button class="btn green sm hidden" id="rhFullSession">▶ 完整疗程（热身→ROM→收下巴→本体）</button>
+  </div>
+</div>
+
+<!-- LIVE TRAINING STAGE (also used for calibration) -->
+<div id="rehabStage" class="screen hidden">
+  <div class="rh-stage-wrap" id="rhStageWrap">
+    <video id="rhVideo" autoplay muted playsinline></video>
+    <canvas id="rhCanvas"></canvas>
+    <div class="cor tl"></div><div class="cor tr"></div><div class="cor bl"></div><div class="cor br"></div>
+    <div class="rh-topbar">
+      <div class="tb"><div class="tl">模块</div><div class="tv" id="rhModName">—</div></div>
+      <div class="tb" style="align-items:flex-end"><div class="tl">用时</div><div class="tv" id="rhTimer">0:00</div></div>
+    </div>
+    <div id="rhInstruction">准备中…</div>
+    <div id="rhSubInstruction"></div>
+    <div id="rhSlowWarn">慢一点 ↓</div>
+    <div id="rhAngles"></div>
+    <button id="rhStopBtn">■ 结束</button>
+    <div class="rh-bottombar">
+      <div class="bb"><div class="bl">组次</div><div class="bv" id="rhReps">—</div></div>
+      <div class="bb"><div class="bl">保持</div><div class="bv" id="rhHold">—</div></div>
+      <div class="bb"><div class="bl">得分</div><div class="bv" id="rhScore">0</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- REPORT -->
+<div id="rhReport" class="screen rh-screen hidden">
+  <div class="rh-h1" style="color:var(--green)">训练报告</div>
+  <div class="rh-sub" id="rhReportSub">本次训练的客观指标 — 这些也是临床随访常用的量化结果。</div>
+  <div class="rep-grid" id="rhRepGrid"></div>
+  <div class="rh-panel" id="rhAdvice" style="font-size:.74rem;color:rgba(0,245,255,.7);line-height:1.8;"></div>
+  <div class="rh-btn-row">
+    <button class="btn ghost sm" id="rhReportMenu">← 训练菜单</button>
+    <button class="btn green sm" id="rhReportHome">主页</button>
+  </div>
+</div>
+
+<!-- GENERIC / SYMPTOM MODAL -->
+<div id="rhModal" class="rh-modal hidden">
+  <div class="mq" id="rhModalQ">问题</div>
+  <div class="rh-btn-row" id="rhModalBtns" style="margin-top:0;"></div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════════════════
@@ -1106,6 +1313,496 @@ document.getElementById('restartBtn').addEventListener('click',()=>{fullReset();
 document.getElementById('playAgainBtn').addEventListener('click',()=>{fullReset();hideAll();document.getElementById('startScreen').classList.remove('hidden');gameState='idle';});
 window.addEventListener('resize',()=>{if(gameState==='playing')resize();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&gameState==='playing')triggerGameOver();});
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════
+     CERVICAL REHAB ENGINE  (ES module — MediaPipe head pose)
+     Evidence base:
+       • Cervical AROM norms — targets set as % of measured pain-free max
+       • JOSPT 2017 Neck Pain CPG — craniocervical flexion / deep neck flexor
+       • Sarig-Bahat VR kinematics — ROM, velocity, smoothness, accuracy
+       • Treleaven sensorimotor — joint position error, gaze stability
+       • Dosage consensus — 10s holds × ~10 reps, paced rest, pain-free
+     ═══════════════════════════════════════════════════════════ -->
+<script type="module">
+const $=id=>document.getElementById(id);
+const screens=[...document.querySelectorAll('.screen')];
+function show(id){screens.forEach(s=>s.classList.add('hidden'));const el=$(id);if(el)el.classList.remove('hidden');}
+
+// ── persistent store ──
+const STORE='cervicalRehab.v1';
+function loadStore(){try{return JSON.parse(localStorage.getItem(STORE))||{};}catch(e){return {};}}
+function saveStore(s){try{localStorage.setItem(STORE,JSON.stringify(s));}catch(e){}}
+let DB=loadStore();
+if(!DB.sessions)DB.sessions=[];
+
+// ── profile + calibration state ──
+const PROFILE={population:'general',flags:{},cleared:true};
+const CAL={neutral:null,rom:{rotPos:30,rotNeg:30,fePos:25,feNeg:25,latPos:25,latNeg:25,tuck:0},ready:false};
+if(DB.cal){Object.assign(CAL,DB.cal);}
+if(DB.profile){Object.assign(PROFILE,DB.profile);}
+
+// dosing presets (clinical defaults)
+function dosing(){
+  return PROFILE.population==='patient'
+    ? {holdSec:10,reps:10,sets:1,restSec:8,romPct:0.70,maxVel:100}   // CCFT-style, conservative, pain-free
+    : {holdSec:6, reps:8, sets:1,restSec:5,romPct:0.80,maxVel:150};
+}
+function flagged(){return Object.values(PROFILE.flags).some(Boolean) && !PROFILE.flags.none;}
+
+// ═══════════ HEAD POSE (MediaPipe FaceLandmarker) ═══════════
+let faceLandmarker=null, trackMode='loading'; // loading | mp | unavailable
+const rhVideo=$('rhVideo'), rhCanvas=$('rhCanvas'), rctx=rhCanvas.getContext('2d');
+let rhStream=null;
+
+let mpPromise=null;
+function loadMP(){
+  if(mpPromise)return mpPromise;
+  mpPromise=(async()=>{
+    const VER='0.10.18';
+    try{
+      const mod=await import(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${VER}/vision_bundle.mjs`);
+      const fileset=await mod.FilesetResolver.forVisionTasks(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${VER}/wasm`);
+      const opts={baseOptions:{modelAssetPath:'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'},
+                  outputFacialTransformationMatrixes:true,runningMode:'VIDEO',numFaces:1};
+      try{ faceLandmarker=await mod.FaceLandmarker.createFromOptions(fileset,{...opts,baseOptions:{...opts.baseOptions,delegate:'GPU'}}); }
+      catch(e){ faceLandmarker=await mod.FaceLandmarker.createFromOptions(fileset,{...opts,baseOptions:{...opts.baseOptions,delegate:'CPU'}}); }
+      trackMode='mp';
+    }catch(e){ console.warn('MediaPipe load failed',e); trackMode='unavailable'; }
+  })();
+  return mpPromise;
+}
+
+// column-major 4x4 → Euler degrees (XYZ). pitch=nod, yaw=rotation, roll=tilt
+function matrixToEuler(m){
+  const r00=m[0],r10=m[1],r20=m[2],r21=m[6],r22=m[10];
+  const sy=Math.hypot(r00,r10),D=180/Math.PI;
+  let rx,ry,rz;
+  if(sy>1e-6){rx=Math.atan2(r21,r22);ry=Math.atan2(-r20,sy);rz=Math.atan2(r10,r00);}
+  else{rx=Math.atan2(-m[9],m[5]);ry=Math.atan2(-r20,sy);rz=0;}
+  return {pitch:rx*D,yaw:ry*D,roll:rz*D,tz:m[14]};
+}
+
+const pose={raw:{y:0,p:0,r:0,tz:0},s:{y:0,p:0,r:0,tz:0},prev:{y:0,p:0,r:0},vel:0,found:false,t:0};
+let poseRAF=null,lastVT=-1;
+function startPoseLoop(){ if(poseRAF)return; const loop=()=>{poseRAF=requestAnimationFrame(loop);pumpPose();}; loop(); }
+function stopPoseLoop(){ if(poseRAF)cancelAnimationFrame(poseRAF); poseRAF=null; }
+function pumpPose(){
+  if(trackMode!=='mp'||!faceLandmarker||rhVideo.readyState<2)return;
+  const now=performance.now();
+  if(rhVideo.currentTime===lastVT)return; lastVT=rhVideo.currentTime;
+  let res; try{res=faceLandmarker.detectForVideo(rhVideo,now);}catch(e){return;}
+  const M=res.facialTransformationMatrixes;
+  if(M&&M.length){
+    const e=matrixToEuler(M[0].data);
+    pose.raw=e;
+    const A=0.35; // EMA — mirrors arcade smoothAndApply responsiveness
+    pose.s.y+=(e.yaw-pose.s.y)*A; pose.s.p+=(e.pitch-pose.s.p)*A;
+    pose.s.r+=(e.roll-pose.s.r)*A; pose.s.tz+=(e.tz-pose.s.tz)*A;
+    const dt=Math.max(0.001,(now-pose.t)/1000);
+    pose.vel=Math.hypot(pose.s.y-pose.prev.y,pose.s.p-pose.prev.p,pose.s.r-pose.prev.r)/dt;
+    pose.prev={y:pose.s.y,p:pose.s.p,r:pose.s.r};
+    pose.t=now; pose.found=true;
+  } else pose.found=false;
+}
+// deviation from neutral
+function dev(){const n=CAL.neutral||{y:0,p:0,r:0,tz:0};return {rot:pose.s.y-n.y,fe:pose.s.p-n.p,lat:pose.s.r-n.r,tz:pose.s.tz-n.tz};}
+function planeDev(pl){const d=dev();return pl==='rotation'?d.rot:pl==='lateral'?d.lat:d.fe;}
+function planeRange(pl){const r=CAL.rom;return pl==='rotation'?[-r.rotNeg,r.rotPos]:pl==='lateral'?[-r.latNeg,r.latPos]:[-r.feNeg,r.fePos];}
+
+// ── camera ──
+async function startCam(){
+  if(rhStream)return true;
+  try{rhStream=await navigator.mediaDevices.getUserMedia({video:{width:{ideal:640},height:{ideal:480},facingMode:'user'},audio:false});}
+  catch(e){return false;}
+  rhVideo.srcObject=rhStream;
+  await new Promise(r=>{rhVideo.onloadedmetadata=()=>{rhVideo.play();r();};});
+  return true;
+}
+function stopCam(){ if(rhStream){rhStream.getTracks().forEach(t=>t.stop());rhStream=null;rhVideo.srcObject=null;} }
+
+// ═══════════ STAGE RENDER ═══════════
+let W2,H2,stageRAF=null;
+function resizeRh(){const w=$('rhStageWrap');W2=w.offsetWidth;H2=w.offsetHeight;rhCanvas.width=W2;rhCanvas.height=H2;}
+const view={axis:'h',min:-30,max:30,target:null,band:6,marker:0,hold:0,pacer:null,cross:false,zone:null};
+let tooFast=false;
+function startRender(){ if(stageRAF)return; const loop=()=>{stageRAF=requestAnimationFrame(loop);drawStage();}; loop(); }
+function stopRender(){ if(stageRAF)cancelAnimationFrame(stageRAF); stageRAF=null; }
+function clamp01(t){return Math.max(0,Math.min(1,t));}
+function valToXY(v){
+  const t=clamp01((v-view.min)/((view.max-view.min)||1));
+  if(view.axis==='h')return [0.15*W2+t*0.7*W2, H2*0.55];
+  return [W2*0.5, 0.85*H2-t*0.7*H2];
+}
+function drawStage(){
+  rctx.clearRect(0,0,W2,H2);
+  tooFast=pose.found&&pose.vel>(dosing().maxVel);
+  $('rhSlowWarn').classList.toggle('show',tooFast);
+  $('rhAngles').textContent=pose.found?`旋转 ${dev().rot.toFixed(0)}°  俯仰 ${dev().fe.toFixed(0)}°  侧屈 ${dev().lat.toFixed(0)}°`:(trackMode==='mp'?'未检测到人脸 — 请正对摄像头':'');
+  // fixation cross (gaze)
+  if(view.cross){
+    rctx.save();rctx.strokeStyle='#ffee00';rctx.shadowColor='#ffee00';rctx.shadowBlur=14;rctx.lineWidth=2;
+    const cx=W2/2,cy=H2*0.5;rctx.beginPath();rctx.moveTo(cx-14,cy);rctx.lineTo(cx+14,cy);rctx.moveTo(cx,cy-14);rctx.lineTo(cx,cy+14);rctx.stroke();rctx.restore();
+  }
+  // track
+  rctx.save();
+  rctx.strokeStyle='rgba(0,245,255,.18)';rctx.lineWidth=2;
+  rctx.beginPath();
+  if(view.axis==='h'){rctx.moveTo(0.15*W2,H2*0.55);rctx.lineTo(0.85*W2,H2*0.55);}
+  else{rctx.moveTo(W2*0.5,0.15*H2);rctx.lineTo(W2*0.5,0.85*H2);}
+  rctx.stroke();
+  // neutral tick
+  const [nx,ny]=valToXY(0);
+  rctx.strokeStyle='rgba(0,245,255,.4)';rctx.beginPath();
+  if(view.axis==='h'){rctx.moveTo(nx,ny-10);rctx.lineTo(nx,ny+10);}else{rctx.moveTo(nx-10,ny);rctx.lineTo(nx+10,ny);}
+  rctx.stroke();
+  rctx.restore();
+  // target zone
+  if(view.target!=null){
+    const [tx,ty]=valToXY(view.target);
+    rctx.save();
+    const ok=Math.abs(view.marker-view.target)<=view.band;
+    rctx.fillStyle=ok?'rgba(0,255,136,.22)':'rgba(0,255,136,.10)';
+    rctx.strokeStyle=ok?'rgba(0,255,136,.9)':'rgba(0,255,136,.5)';
+    rctx.lineWidth=2;rctx.shadowColor='#00ff88';rctx.shadowBlur=ok?18:6;
+    const [bx0]=valToXY(view.target-view.band),[bx1]=valToXY(view.target+view.band);
+    if(view.axis==='h'){const x0=Math.min(bx0,bx1);rctx.beginPath();rctx.rect(x0,H2*0.55-26,Math.abs(bx1-bx0),52);rctx.fill();rctx.stroke();}
+    else{const[,by0]=valToXY(view.target-view.band),[,by1]=valToXY(view.target+view.band);const y0=Math.min(by0,by1);rctx.beginPath();rctx.rect(W2*0.5-26,y0,52,Math.abs(by1-by0));rctx.fill();rctx.stroke();}
+    // hold ring
+    if(view.hold>0){
+      rctx.beginPath();rctx.strokeStyle='#00ff88';rctx.lineWidth=4;rctx.shadowBlur=20;
+      rctx.arc(tx,ty,30,-Math.PI/2,-Math.PI/2+Math.PI*2*clamp01(view.hold));rctx.stroke();
+    }
+    rctx.restore();
+  }
+  // pacer (warmup / gaze)
+  if(view.pacer!=null){
+    const [px,py]=valToXY(view.pacer);
+    rctx.save();rctx.fillStyle='rgba(255,238,0,.5)';rctx.shadowColor='#ffee00';rctx.shadowBlur=14;
+    rctx.beginPath();rctx.arc(px,py,9,0,Math.PI*2);rctx.fill();rctx.restore();
+  }
+  // marker (current head)
+  const [mx,my]=valToXY(view.marker);
+  rctx.save();
+  const mc=tooFast?'#ffee00':'#00f5ff';
+  const g=rctx.createRadialGradient(mx,my,2,mx,my,18);
+  g.addColorStop(0,mc);g.addColorStop(1,mc+'00');
+  rctx.fillStyle=g;rctx.beginPath();rctx.arc(mx,my,18,0,Math.PI*2);rctx.fill();
+  rctx.fillStyle='#fff';rctx.shadowColor=mc;rctx.shadowBlur=12;rctx.beginPath();rctx.arc(mx,my,5,0,Math.PI*2);rctx.fill();
+  rctx.restore();
+}
+
+// ═══════════ ASYNC ENGINE (cancellable) ═══════════
+let runToken=0;
+function sleep(ms,tok){return new Promise((res,rej)=>{const c=setInterval(()=>{if(tok!==runToken){clearInterval(c);rej('STOP');}},120);setTimeout(()=>{clearInterval(c);res();},ms);});}
+function until(pred,tok,timeout=0){return new Promise((res,rej)=>{const t0=performance.now();const c=setInterval(()=>{if(tok!==runToken){clearInterval(c);return rej('STOP');}try{if(pred()){clearInterval(c);return res(true);}}catch(e){}if(timeout&&performance.now()-t0>timeout){clearInterval(c);return res(false);}},50);});}
+async function countdown(n,tok){for(let i=n;i>=1;i--){setSub(`${i}…`);await sleep(700,tok);}setSub('');}
+
+function setMod(t){$('rhModName').textContent=t;}
+function setInstr(t){$('rhInstruction').textContent=t;}
+function setSub(t){$('rhSubInstruction').textContent=t||'';}
+function setReps(t){$('rhReps').textContent=t;}
+function setHold(t){$('rhHold').textContent=t;}
+let curScore=0; function setScore(v){curScore=v;$('rhScore').textContent=Math.round(v);}
+
+let timerInt=null,timerT0=0;
+function startTimer(){timerT0=performance.now();timerInt=setInterval(()=>{const s=Math.floor((performance.now()-timerT0)/1000);$('rhTimer').textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;},500);}
+function stopTimer(){if(timerInt)clearInterval(timerInt);timerInt=null;}
+
+// symptom / generic modal → returns chosen value
+function ask(question,options){
+  return new Promise(res=>{
+    $('rhModalQ').textContent=question;
+    const box=$('rhModalBtns');box.innerHTML='';
+    options.forEach(o=>{const b=document.createElement('button');b.className='btn '+(o.cls||'green')+' sm';b.textContent=o.label;b.onclick=()=>{$('rhModal').classList.add('hidden');res(o.val);};box.appendChild(b);});
+    $('rhModal').classList.remove('hidden');
+  });
+}
+
+// ═══════════ CALIBRATION ═══════════
+async function sweep(plane,instr,sign,tok){
+  setInstr(instr);setSub('到位后停住，保持约 2 秒');view.axis=plane==='flexext'?'v':'h';
+  const r=20;view.min=-(plane==='flexext'?40:50);view.max=(plane==='flexext'?40:50);view.target=null;view.pacer=null;view.cross=false;
+  let ext=0;const t0=performance.now();
+  await until(()=>{const v=planeDev(plane);view.marker=v;if(sign>0)ext=Math.max(ext,v);else ext=Math.min(ext,v);return performance.now()-t0>4200;},tok);
+  return Math.max(8,Math.abs(ext)); // floor to avoid zero-range
+}
+async function calibrate(){
+  const tok=++runToken;
+  if(!(await ensureStage()))return;
+  setMod('校准');setScore(0);setReps('—');setHold('—');
+  try{
+    setInstr('请正对屏幕，头部自然居中放松');await countdown(3,tok);
+    setSub('采集中立位…');const nb={y:0,p:0,r:0,tz:0};let n=0;const t0=performance.now();
+    await until(()=>{if(pose.found){nb.y+=pose.s.y;nb.p+=pose.s.p;nb.r+=pose.s.r;nb.tz+=pose.s.tz;n++;}return performance.now()-t0>1600;},tok);
+    if(!n){await ask('未检测到人脸，无法校准。请确保光线充足并正对摄像头。',[{label:'好',val:1}]);show('rhMenu');return;}
+    CAL.neutral={y:nb.y/n,p:nb.p/n,r:nb.r/n,tz:nb.tz/n};
+    CAL.rom.rotPos=await sweep('rotation','缓慢向右转头到最大（不痛）',+1,tok);
+    CAL.rom.rotNeg=await sweep('rotation','缓慢向左转头到最大（不痛）',-1,tok);
+    CAL.rom.latPos=await sweep('lateral','右耳缓慢向右肩靠近（侧屈）',+1,tok);
+    CAL.rom.latNeg=await sweep('lateral','左耳缓慢向左肩靠近（侧屈）',-1,tok);
+    CAL.rom.fePos =await sweep('flexext','缓慢低头看向下方（屈）',+1,tok);
+    CAL.rom.feNeg =await sweep('flexext','缓慢抬头看向上方（伸）',-1,tok);
+    // chin tuck reference (retraction → depth change)
+    setInstr('做一个"收下巴 / 双下巴"动作并保持');setSub('下巴水平后缩，不要点头');view.axis='h';view.target=null;
+    let tuck=0;const tt=performance.now();
+    await until(()=>{const d=dev();view.marker=0;if(Math.abs(d.tz)>Math.abs(tuck))tuck=d.tz;return performance.now()-tt>3500;},tok);
+    CAL.rom.tuck=tuck||0.02;
+    CAL.ready=true;DB.cal=CAL;DB.profile=PROFILE;saveStore(DB);
+    setInstr('校准完成 ✓');setSub('');await sleep(900,tok);
+    show('rhMenu');refreshMenu();
+  }catch(e){ if(e!=='STOP')console.error(e); }
+  finally{ stopRender();stopTimer(); }
+}
+
+// ═══════════ MODULES ═══════════
+function smoothnessTracker(){return {n:0,dir:0,reversals:0,sum:0,cnt:0,
+  feed(v){this.sum+=Math.abs(pose.vel);this.cnt++;const dv=v-this.last;if(this.last!==undefined){const s=Math.sign(dv);if(s&&s!==this.dir&&this.dir!==0)this.reversals++;if(s)this.dir=s;}this.last=v;},
+  meanVel(){return this.cnt?this.sum/this.cnt:0;}};}
+
+const MODULES={
+  // ─ Warm-up: gentle paced oscillation, no scoring ─
+  warmup:{name:'热身',async run(tok){
+    const planes=[['rotation','缓慢左右转头'],['lateral','缓慢左右侧屈（耳向肩）'],['flexext','缓慢低头抬头']];
+    for(const [pl,label] of planes){
+      const [mn,mx]=planeRange(pl);const amp=0.4;view.axis=pl==='flexext'?'v':'h';view.min=mn;view.max=mx;view.target=null;view.cross=false;view.hold=0;
+      setInstr(label);setSub('跟随黄点，幅度要小、速度要慢');
+      const dur=18000,t0=performance.now();
+      await until(()=>{const ph=(performance.now()-t0)/4000*Math.PI*2;const sw=Math.sin(ph);view.pacer=sw*(sw>=0?mx:Math.abs(mn))*amp;view.marker=planeDev(pl);return performance.now()-t0>dur;},tok);
+    }
+    view.pacer=null;setInstr('热身完成 ✓');await sleep(800,tok);
+    return {module:'warmup',metrics:{完成:'是'}};
+  }},
+
+  // ─ ROM training: reach calibrated target, hold, rewarded for smoothness ─
+  rom:{name:'活动度 ROM',async run(tok){
+    const d=dosing();const planes=PROFILE.population==='patient'?[['rotation','转头'],['lateral','侧屈']]:[['rotation','转头'],['lateral','侧屈'],['flexext','屈伸']];
+    const perDir=Math.ceil(d.reps/2);const total=planes.length*2*perDir;
+    let peakByPlane={},velAll=[],revAll=[],done=0;
+    for(const [pl] of planes){
+      const [mn,mx]=planeRange(pl);view.axis=pl==='flexext'?'v':'h';view.min=mn*1.1;view.max=mx*1.1;view.cross=false;
+      let peak=0;
+      for(let dir of [1,-1]){
+        const mag=dir>0?mx:mn;const target=mag*d.romPct;view.band=Math.max(5,Math.abs(mag)*0.16);
+        for(let rep=0;rep<perDir;rep++){
+          setMod('活动度 ROM');setInstr((pl==='rotation'?(dir>0?'缓慢向右转头':'缓慢向左转头'):pl==='lateral'?(dir>0?'右耳向右肩':'左耳向左肩'):(dir>0?'缓慢低头':'缓慢抬头'))+' 到绿区并保持');
+          setReps(`${done+1}/${total}`);
+          const sm=smoothnessTracker();view.target=target;let hold=0,holdT=null;
+          const ok=await until(()=>{
+            const v=planeDev(pl);view.marker=v;sm.feed(v);peak=Math.max(peak,Math.abs(v));
+            const inZone=Math.abs(v-target)<=view.band && !tooFast;
+            if(inZone){if(holdT===null)holdT=performance.now();hold=Math.min(1,(performance.now()-holdT)/1200);}else{holdT=null;hold=0;}
+            view.hold=hold;setHold(hold>0?`${Math.round(hold*100)}%`:'—');
+            return hold>=1;
+          },tok,15000);
+          view.hold=0;setHold('—');
+          if(ok){done++;curScore+=10;if(typeof sfxPotion==='function')sfxPotion(true);}
+          velAll.push(sm.meanVel());revAll.push(sm.reversals);
+          setScore(curScore);
+          // brief settle back toward neutral
+          setInstr('缓慢回到中立位');await until(()=>Math.abs(planeDev(pl))<view.band*0.9,tok,4000);
+        }
+      }
+      peakByPlane[pl]=Math.round(peak);
+    }
+    const meanVel=velAll.length?velAll.reduce((a,b)=>a+b,0)/velAll.length:0;
+    const meanRev=revAll.length?revAll.reduce((a,b)=>a+b,0)/revAll.length:0;
+    const smoothScore=Math.max(0,100-meanRev*8);
+    return {module:'rom',metrics:{
+      '旋转峰值':(peakByPlane.rotation||0)+'°',
+      '侧屈峰值':(peakByPlane.lateral||0)+'°',
+      '平滑度':Math.round(smoothScore),
+      '命中':`${done}/${total}`
+    },raw:{peakByPlane,smoothScore,meanVel}};
+  }},
+
+  // ─ Chin-tuck / craniocervical flexion — hold 10s × reps ─
+  chintuck:{name:'收下巴 CCF',async run(tok){
+    const d=dosing();view.axis='h';view.min=0;view.max=1;view.band=0.12;view.cross=false;
+    let okHolds=0,totalHold=0;
+    for(let rep=0;rep<d.reps;rep++){
+      setMod('收下巴 CCF');setReps(`${rep+1}/${d.reps}`);
+      setInstr('收下巴（双下巴），保持 '+d.holdSec+' 秒');setSub('下巴水平后缩，肩颈放松');
+      view.target=1;let hold=0,holdMs=0,last=performance.now();
+      const ok=await until(()=>{
+        const ratio=CAL.rom.tuck?clamp01(dev().tz/CAL.rom.tuck):0;view.marker=ratio;
+        const now=performance.now(),dms=now-last;last=now;
+        if(ratio>=0.7&&!tooFast){holdMs+=dms;}else{holdMs=Math.max(0,holdMs-dms*0.5);}
+        hold=clamp01(holdMs/(d.holdSec*1000));view.hold=hold;setHold(`${Math.round(hold*d.holdSec)}s`);
+        return hold>=1;
+      },tok,d.holdSec*1000*2.2);
+      view.hold=0;
+      if(ok){okHolds++;curScore+=20;if(typeof sfxPotion==='function')sfxPotion(true);}
+      totalHold+=Math.round(hold*d.holdSec);setScore(curScore);
+      if(rep<d.reps-1){setInstr('放松');setSub('');for(let s=d.restSec;s>=1;s--){setHold(`休息 ${s}s`);await sleep(1000,tok);}setHold('—');}
+    }
+    return {module:'chintuck',metrics:{'达标保持':`${okHolds}/${d.reps}`,'累计保持':totalHold+'s'},raw:{okHolds}};
+  }},
+
+  // ─ Proprioception / joint position error (Treleaven) ─
+  proprio:{name:'本体感觉',async run(tok){
+    const d=dosing();const errs=[];const reps=Math.min(6,d.reps);
+    const tests=[['rotation',1],['rotation',-1],['lateral',1],['lateral',-1]];
+    for(let i=0;i<reps;i++){
+      const [pl,dir]=tests[i%tests.length];const [mn,mx]=planeRange(pl);
+      view.axis=pl==='flexext'?'v':'h';view.min=mn*1.1;view.max=mx*1.1;view.cross=false;
+      const target=(dir>0?mx:mn)*0.6;view.band=Math.max(5,Math.abs(target)*0.18);
+      setMod('本体感觉');setReps(`${i+1}/${reps}`);
+      setInstr('睁眼，缓慢移动到绿色目标');view.target=target;
+      await until(()=>{const v=planeDev(pl);view.marker=v;return Math.abs(v-target)<=view.band;},tok,12000);
+      setInstr('记住这个位置…');await sleep(900,tok);
+      setInstr('闭上眼睛，凭感觉回到正前方中立位');view.target=0;setSub('回到后停住');
+      await sleep(3200,tok);
+      const err=Math.abs(planeDev(pl));errs.push(err);
+      setInstr('睁眼 — 误差 '+err.toFixed(0)+'°');setSub('');if(typeof sfxBossHit==='function')sfxBossHit();
+      curScore+=Math.max(0,30-err);setScore(curScore);await sleep(1200,tok);
+    }
+    const mean=errs.length?errs.reduce((a,b)=>a+b,0)/errs.length:0;
+    return {module:'proprio',metrics:{'平均定位误差':mean.toFixed(1)+'°','最佳':Math.min(...errs).toFixed(0)+'°'},raw:{mean}};
+  }},
+
+  // ─ Gaze stability / eye-head coordination ─
+  gaze:{name:'凝视稳定',async run(tok){
+    const pre=await ask('开始前：你现在有头晕或不适吗？',[{label:'没有',val:0,cls:'green'},{label:'有一点',val:1,cls:'ghost'},{label:'明显头晕',val:2,cls:'ghost'}]);
+    if(pre>=2){await ask('出现明显头晕时不建议进行凝视训练。请休息并咨询专业人员。',[{label:'好',val:1}]);return {module:'gaze',metrics:{'已跳过':'头晕'}};}
+    const [mn,mx]=planeRange('rotation');view.axis='h';view.min=mn;view.max=mx;view.cross=true;view.target=null;view.hold=0;
+    const amp=0.5,cycles=6;let done=0;
+    setMod('凝视稳定');
+    for(let c=0;c<cycles;c++){
+      setReps(`${c+1}/${cycles}`);
+      setInstr('眼睛盯住黄色十字，缓慢向右转头再回正');
+      let t0=performance.now();await until(()=>{const ph=(performance.now()-t0)/2600*Math.PI*2;view.pacer=Math.sin(ph)*mx*amp;view.marker=planeDev('rotation');return performance.now()-t0>2600;},tok);
+      setInstr('盯住十字，缓慢向左转头再回正');
+      t0=performance.now();await until(()=>{const ph=(performance.now()-t0)/2600*Math.PI*2;view.pacer=Math.sin(ph)*Math.abs(mn)*amp*-1;view.marker=planeDev('rotation');return performance.now()-t0>2600;},tok);
+      done++;curScore+=10;setScore(curScore);
+    }
+    view.pacer=null;view.cross=false;
+    const post=await ask('训练后：头晕程度有变化吗？',[{label:'没有/减轻',val:0,cls:'green'},{label:'差不多',val:1,cls:'ghost'},{label:'加重了',val:2,cls:'ghost'}]);
+    return {module:'gaze',metrics:{'完成回合':`${done}/${cycles}`,'头晕变化':['改善/无','持平','加重'][post]}};
+  }},
+};
+
+// ═══════════ SESSION FLOW ═══════════
+async function ensureStage(){
+  show('rehabStage');resizeRh();
+  if(trackMode==='loading'){setInstr('正在加载姿态模型…');setSub('首次使用需联网下载（约几秒）');await loadMP();}
+  if(!(await startCam())){setInstr('无法访问摄像头');await ask('未能打开摄像头。请检查浏览器权限后重试。',[{label:'返回',val:1}]);show('rhMenu');return false;}
+  if(trackMode!=='mp'){
+    await ask('未能加载头部姿态模型（可能离线或浏览器不支持）。需要联网首次加载后方可进行角度训练。',[{label:'返回',val:1}]);
+    stopCam();show('rhMenu');return false;
+  }
+  startPoseLoop();startRender();startTimer();
+  return true;
+}
+async function runModule(key){
+  if(!CAL.ready){await ask('请先完成校准，建立你的中立位与无痛活动范围。',[{label:'去校准',val:1}]);return;}
+  const tok=++runToken;
+  if(!(await ensureStage()))return;
+  curScore=0;setScore(0);setMod(MODULES[key].name);
+  const results=[];
+  try{ results.push(await MODULES[key].run(tok)); finishSession(results); }
+  catch(e){ if(e!=='STOP')console.error(e); stopRender();stopTimer(); show('rhMenu'); }
+}
+async function runFullSession(){
+  if(!CAL.ready){await ask('请先完成校准。',[{label:'去校准',val:1}]);return;}
+  const tok=++runToken;
+  if(!(await ensureStage()))return;
+  curScore=0;setScore(0);
+  const seq=['warmup','rom','chintuck','proprio'];const results=[];
+  try{ for(const k of seq){if(tok!==runToken)break;setMod(MODULES[k].name);results.push(await MODULES[k].run(tok));} finishSession(results); }
+  catch(e){ if(e!=='STOP')console.error(e); stopRender();stopTimer(); show('rhMenu'); }
+}
+function finishSession(results){
+  stopRender();stopTimer();
+  const session={date:new Date().toISOString(),population:PROFILE.population,results,rom:{...CAL.rom}};
+  DB.sessions.push(session);if(DB.sessions.length>200)DB.sessions.shift();saveStore(DB);
+  if(typeof sfxVictory==='function')try{sfxVictory();}catch(e){}
+  renderReport(session);show('rhReport');
+}
+
+// ═══════════ REPORT ═══════════
+function prevMetric(label){
+  for(let i=DB.sessions.length-2;i>=0;i--){for(const r of DB.sessions[i].results){if(r.metrics&&label in r.metrics)return r.metrics[label];}}
+  return null;
+}
+function renderReport(session){
+  const grid=$('rhRepGrid');grid.innerHTML='';
+  const cards=[];
+  for(const r of session.results){if(!r.metrics)continue;for(const [k,v] of Object.entries(r.metrics))cards.push([k,v]);}
+  if(!cards.length)cards.push(['完成','✓']);
+  cards.forEach(([k,v])=>{
+    const num=parseFloat(String(v));const prev=prevMetric(k);const pnum=prev!=null?parseFloat(String(prev)):null;
+    let trend='',cls='flat';
+    if(pnum!=null&&!isNaN(num)&&!isNaN(pnum)){const better=/误差/.test(k)?num<pnum:num>pnum;if(num!==pnum){cls=better?'up':'down';trend=(num>pnum?'▲ ':'▼ ')+`上次 ${prev}`;}else{trend='＝ 持平';}}
+    const c=document.createElement('div');c.className='repc';
+    c.innerHTML=`<div class="rl">${k}</div><div class="rv">${v}</div><div class="rtrend ${cls}">${trend}</div>`;
+    grid.appendChild(c);
+  });
+  const tips=[];
+  tips.push(`本次共记录 ${session.results.length} 个模块。数据已保存（累计 ${DB.sessions.length} 次），可在报告中查看趋势。`);
+  if(PROFILE.population==='patient')tips.push('保持在无痛范围内训练；若出现疼痛、头晕或上肢症状，请停止并咨询专业人员。');
+  tips.push('循证建议：颈部训练宜每日少量多次、动作缓慢可控；活动度与深层屈肌训练长期坚持才有效。');
+  $('rhAdvice').innerHTML=tips.map(t=>'• '+t).join('<br>');
+}
+
+// ═══════════ MENU GATING ═══════════
+function refreshMenu(){
+  const locked=new Set();
+  if(PROFILE.flags.dizzy||PROFILE.flags.trauma)locked.add('gaze');
+  document.querySelectorAll('#rhModGrid .modc').forEach(c=>{
+    const mod=c.dataset.mod;const lockEl=c.querySelector('.mlock');
+    const isLocked=!CAL.ready||locked.has(mod);
+    c.classList.toggle('locked',isLocked);
+    if(lockEl)lockEl.textContent=!CAL.ready?'🔒':locked.has(mod)?'⛔':'';
+    if(lockEl)lockEl.style.display=isLocked?'':'none';
+  });
+  $('rhMenuSub').textContent=CAL.ready?'选择训练模块。所有动作请缓慢、可控、在无痛范围内进行。':'先完成校准（中立位 + 无痛活动范围），再选择训练模块。';
+  $('rhFullSession').classList.toggle('hidden',!CAL.ready);
+  let warn='';
+  if(trackMode==='unavailable')warn='⚠ 头部姿态模型未能加载（可能离线）。角度训练需要联网首次加载。';
+  else if(flagged())warn='⚠ 已根据你的红旗征锁定凝视等高刺激模块，并采用保守剂量。请优先就医。';
+  $('rhTrackWarn').classList.toggle('hidden',!warn);$('rhTrackWarn').textContent=warn;
+}
+
+// ═══════════ WIRING ═══════════
+$('goRehab').onclick=()=>{show('rhOnboard');};
+$('goArcade').onclick=async()=>{
+  const go=await ask('街机模式是快节奏弹幕躲避，会诱发快速甩头，<b>不属于颈椎康复</b>。仅供娱乐，颈部不适者请勿进行。确定进入？',[{label:'进入街机',val:1,cls:'ghost'},{label:'返回',val:0,cls:'green'}]);
+  if(go){stopAllRehab();show('startScreen');}
+};
+function stopAllRehab(){runToken++;stopRender();stopPoseLoop();stopTimer();stopCam();}
+
+$('rhOnboardBack').onclick=()=>{stopAllRehab();show('homeScreen');};
+$('popGeneral').onclick=()=>{PROFILE.population='general';PROFILE.flags={};DB.profile=PROFILE;saveStore(DB);show('rhMenu');refreshMenu();};
+$('popPatient').onclick=()=>{PROFILE.population='patient';show('rhScreen');};
+
+document.querySelectorAll('#rhScreen input[data-flag]').forEach(cb=>{
+  cb.onchange=()=>{
+    if(cb.dataset.flag==='none'&&cb.checked){document.querySelectorAll('#rhScreen input[data-flag]').forEach(o=>{if(o!==cb)o.checked=false;});}
+    else if(cb.checked){const n=document.querySelector('#rhScreen input[data-flag="none"]');if(n)n.checked=false;}
+    const flags={};document.querySelectorAll('#rhScreen input[data-flag]').forEach(o=>flags[o.dataset.flag]=o.checked);
+    PROFILE.flags=flags;
+    $('rhFlagWarn').classList.toggle('hidden',!flagged());
+  };
+});
+$('rhScreenBack').onclick=()=>show('rhOnboard');
+$('rhScreenNext').onclick=()=>{PROFILE.cleared=!flagged();DB.profile=PROFILE;saveStore(DB);show('rhMenu');refreshMenu();};
+
+$('rhCalibBtn').onclick=()=>calibrate();
+$('rhMenuBack').onclick=()=>{stopAllRehab();show('homeScreen');};
+$('rhFullSession').onclick=()=>runFullSession();
+document.querySelectorAll('#rhModGrid .modc').forEach(c=>{c.onclick=()=>{if(c.classList.contains('locked'))return;runModule(c.dataset.mod);};});
+
+$('rhStopBtn').onclick=async()=>{
+  const v=await ask('结束当前训练？',[{label:'继续训练',val:0,cls:'green'},{label:'结束',val:1,cls:'ghost'}]);
+  if(v){runToken++;stopRender();stopTimer();show('rhMenu');refreshMenu();}
+};
+$('rhReportMenu').onclick=()=>{stopCam();show('rhMenu');refreshMenu();};
+$('rhReportHome').onclick=()=>{stopAllRehab();show('homeScreen');};
+
+window.addEventListener('resize',()=>{if(!$('rehabStage').classList.contains('hidden'))resizeRh();});
+// preload pose model in background once idle
+window.addEventListener('load',()=>{setTimeout(()=>{if(trackMode==='loading')loadMP();},1500);});
 </script>
 </body>
 </html>
