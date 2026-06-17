@@ -1,1 +1,7 @@
 .vercel
+
+# short-video-maker skill (Python tooling)
+.venv/
+__pycache__/
+output/_tmp/
+tools/MoneyPrinterTurbo/

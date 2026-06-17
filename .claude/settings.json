@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p e:/Games/.claude/skills/short-video-maker)",
+      "Bash(cp -r e:/my-studio/.claude/skills/short-video-maker/. e:/Games/.claude/skills/short-video-maker/)",
+      "Bash(rm -rf e:/Games/.claude/skills/short-video-maker/scripts/__pycache__)"
+    ]
+  }
+}
