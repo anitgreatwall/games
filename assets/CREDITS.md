@@ -30,4 +30,5 @@ NASA/ESA Hubble 影像通常为公有领域（public domain），可自由使用
 ## 词义图标 / Word icons（`assets/sprites/words/`）
 
 每个英文单词配一张与词义对应的 OpenMoji 透明图标（apple→🍎、cat→🐱、red→🔴…），
-共 49 张，来源同上（OpenMoji，CC BY-SA 4.0）。覆盖词库 5 类：ANIMALS / FRUITS / COLORS / FOOD / BODY。
+共 97 张，来源同上（OpenMoji，CC BY-SA 4.0）。覆盖小学主题单元：动物 / 水果 / 颜色 / 食物 / 身体 /
+家庭 / 学习用品 / 天气 / 交通 / 自然 / 物品（数字单元为纯文本+发音，无图标）。词库见 assets/vocab.js。

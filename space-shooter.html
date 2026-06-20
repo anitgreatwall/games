@@ -88,6 +88,46 @@ body.playing #scene{cursor:none;}
 .over-s{font-family:'Orbitron',sans-serif;font-size:clamp(2.4rem,8vw,5rem);font-weight:900;color:var(--yellow);text-shadow:var(--gy);margin-top:1rem;}
 .over-sub{font-family:'Press Start 2P',monospace;font-size:.6rem;color:rgba(0,245,255,.6);margin-top:.6rem;letter-spacing:.1em;line-height:2;text-align:center;}
 .over-new{color:var(--orange);text-shadow:var(--gy);}
+
+/* ── TIER SELECT / MAP / RESULT / PROMPT (learning UI) ── */
+.panel-title{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(1.4rem,4.5vw,2.8rem);color:#fff;text-shadow:var(--gc);letter-spacing:.08em;text-align:center;}
+.panel-sub{font-size:.78rem;letter-spacing:.2em;color:rgba(0,245,255,.5);margin:.4rem 0 1.3rem;text-align:center;}
+.tier-grid{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;max-width:760px;}
+.tier-card{width:210px;padding:1.1rem;border:2px solid rgba(0,245,255,.3);background:rgba(0,245,255,.04);cursor:pointer;text-align:center;transition:all .18s;}
+.tier-card:hover{background:rgba(0,245,255,.12);box-shadow:var(--gc);transform:translateY(-3px);}
+.tier-card .tn{font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.7rem;color:var(--green);text-shadow:var(--gg);}
+.tier-card .te{font-family:'Press Start 2P',monospace;font-size:.5rem;color:rgba(0,245,255,.5);margin:.55rem 0;}
+.tier-card .td{font-size:.72rem;color:rgba(0,245,255,.6);line-height:1.6;}
+.diff-row{display:flex;gap:.6rem;margin-top:1.3rem;align-items:center;}
+.diff-row .dl{font-size:.7rem;color:rgba(0,245,255,.5);letter-spacing:.1em;}
+.diff{padding:.45rem 1.1rem;border:1px solid rgba(255,238,0,.4);color:var(--yellow);font-family:'Share Tech Mono',monospace;font-size:.8rem;cursor:pointer;background:transparent;}
+.diff-note{margin-top:.7rem;font-size:.66rem;color:rgba(0,245,255,.5);letter-spacing:.03em;}
+.diff.on{background:var(--yellow);color:#031;box-shadow:var(--gy);}
+.backbtn{position:fixed;top:1rem;left:1rem;z-index:60;font-family:'Share Tech Mono',monospace;font-size:.8rem;color:rgba(0,245,255,.75);background:rgba(5,8,20,.6);border:1px solid rgba(0,245,255,.3);padding:.4rem .9rem;cursor:pointer;pointer-events:auto;}
+#tierScreen{background:rgba(5,8,16,.74);}
+#mapScreen{overflow-y:auto;padding:3.6rem 1rem 2rem;justify-content:flex-start;background:rgba(5,8,16,.78);}
+.map-grid{display:flex;gap:.9rem;flex-wrap:wrap;justify-content:center;max-width:860px;}
+.node{width:120px;height:108px;border:2px solid rgba(0,245,255,.25);background:rgba(5,12,26,.72);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.25rem;cursor:pointer;transition:all .15s;}
+.node:hover{box-shadow:var(--gc);transform:translateY(-2px);}
+.node.locked{opacity:.4;filter:grayscale(.7);cursor:not-allowed;border-color:rgba(255,255,255,.12);}
+.node.boss{border-color:var(--purple);background:rgba(40,0,60,.5);}
+.node .nidx{font-family:'Press Start 2P',monospace;font-size:.44rem;color:rgba(0,245,255,.5);}
+.node .nname{font-size:.74rem;color:#eaffff;text-align:center;line-height:1.2;padding:0 .2rem;}
+.node .nstars{font-size:.85rem;color:var(--yellow);letter-spacing:1px;height:1.1em;}
+#promptPanel{position:absolute;top:.6rem;left:50%;transform:translateX(-50%);min-width:240px;max-width:82vw;text-align:center;background:rgba(5,8,20,.66);border:1px solid rgba(0,245,255,.3);border-radius:8px;padding:.5rem 1.2rem;}
+.pp-mode{font-family:'Press Start 2P',monospace;font-size:.46rem;letter-spacing:.12em;color:rgba(255,238,0,.75);}
+.pp-main{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(1.5rem,4.2vw,2.6rem);color:#fff;text-shadow:var(--gc);margin:.12rem 0;line-height:1.1;}
+.pp-hint{font-size:.62rem;color:rgba(0,245,255,.6);letter-spacing:.05em;}
+.pp-spk{font-size:2.2rem;cursor:pointer;pointer-events:auto;background:none;border:none;line-height:1.1;}
+.prog{display:flex;gap:3px;justify-content:center;flex-wrap:wrap;max-width:70vw;}
+.pseg{width:20px;height:10px;background:rgba(0,245,255,.13);border:1px solid rgba(0,245,255,.3);}
+.pseg.done{background:var(--green);box-shadow:0 0 6px var(--green);}
+.pseg.cur{background:var(--yellow);box-shadow:0 0 6px var(--yellow);}
+#resultScreen{background:radial-gradient(ellipse at 50% 42%,rgba(0,255,136,.09),rgba(5,8,16,.92) 70%);}
+.res-stars{font-size:3.2rem;color:var(--yellow);text-shadow:var(--gy);letter-spacing:.5rem;height:3.6rem;}
+.res-line{font-family:'Share Tech Mono',monospace;font-size:1rem;color:rgba(0,245,255,.82);margin:.3rem 0;}
+.btn.sm{padding:.6rem 1.7rem;font-size:.82rem;margin-top:.4rem;}
+.btn-row{display:flex;gap:.8rem;margin-top:1.1rem;flex-wrap:wrap;justify-content:center;}
 </style>
 </head>
 <body>
@@ -97,22 +137,44 @@ body.playing #scene{cursor:none;}
 <!-- ════════ START ════════ -->
 <div class="screen" id="startScreen">
   <div class="pixtitle">&gt;&gt; <b>TRAE AI</b> &lt;&lt;</div>
-  <div class="game-title">太空<span>射击</span></div>
-  <div class="chips"><span class="chip a">世界很大</span><span class="chip b">放手去造</span></div>
-  <div class="subtitle">FIRST-PERSON SPACE SHOOTER</div>
+  <div class="game-title">太空<span>词汇</span></div>
+  <div class="chips"><span class="chip a">中小学词汇</span><span class="chip b">脑科学过关</span></div>
+  <div class="subtitle">K-12 VOCABULARY · SPACED-RECALL</div>
   <div class="level-strip">
-    <div class="lc"><div class="ln">001 [READ]</div><div class="lb"><img src="assets/sprites/saucer.png" alt="ufo"></div><div class="ld">读飞船上的<br>英文单词</div></div>
-    <div class="lc"><div class="ln">002 [SHOOT]</div><div class="lb"><img src="assets/sprites/target.png" alt="aim"></div><div class="ld">击落「目标类」<br>单词 得分</div></div>
-    <div class="lc"><div class="ln">003 [COLLECT]</div><div class="lb"><img src="assets/sprites/heart.png" alt="hp"></div><div class="ld">接住「收集类」<br>加血·升火力</div></div>
+    <div class="lc"><div class="ln">001 [READ]</div><div class="lb"><img src="assets/sprites/target.png" alt="read"></div><div class="ld">读题：中→英<br>英→中 / 听音</div></div>
+    <div class="lc"><div class="ln">002 [SHOOT]</div><div class="lb"><img src="assets/sprites/saucer.png" alt="shoot"></div><div class="ld">击落写着<br>正确答案的飞船</div></div>
+    <div class="lc"><div class="ln">003 [LEVEL]</div><div class="lb"><img src="assets/sprites/star.png" alt="level"></div><div class="ld">过关赢★解锁<br>间隔复习记牢</div></div>
   </div>
   <div class="instr">
-    <div class="how-l">HOW TO PLAY / 玩法 · 益智词汇</div>
-    <div class="tr"><span class="ico">🎯</span><span>看顶部规则：只击落 <span class="k">目标类</span> 单词的飞船（打错<span class="k">扣分</span>）</span></div>
-    <div class="tr"><span class="ico">❤️</span><span>开飞船<span class="k">接住</span>「收集类」单词 → 加血 + 升级火力（别打它）</span></div>
-    <div class="tr"><span class="ico">🖱️</span><span>鼠标 <span class="k">瞄准</span> · 点击/空格 <span class="k">开火</span> · <span class="k">WASD</span> 移动飞船规避/接收</span></div>
+    <div class="how-l">HOW TO PLAY / 玩法 · 主动回忆</div>
+    <div class="tr"><span class="ico">🧠</span><span>看顶部题目（<span class="k">中→英 / 英→中 / 听音</span>），<span class="k">击落</span>正确的那艘飞船</span></div>
+    <div class="tr"><span class="ico">🖱️</span><span>鼠标 <span class="k">瞄准</span> · 点击/空格 <span class="k">开火</span> · <span class="k">WASD</span> 移动飞船</span></div>
+    <div class="tr"><span class="ico">⭐</span><span>答对升★过关解锁；答错<span class="k">立刻纠正</span>并稍后再考（间隔复习）</span></div>
   </div>
-  <button class="btn" id="startBtn">▶ START / 开始</button>
-  <div class="best" id="bestLine">BEST · 00000</div>
+  <button class="btn" id="startBtn">▶ 开始学习 / START</button>
+  <div class="best" id="bestLine">XP · 0</div>
+</div>
+
+<!-- ════════ TIER SELECT ════════ -->
+<div class="screen hidden" id="tierScreen">
+  <div class="panel-title">选择学段</div>
+  <div class="panel-sub">CHOOSE YOUR LEVEL</div>
+  <div class="tier-grid" id="tierGrid"></div>
+  <div class="diff-row"><span class="dl">难度 DIFFICULTY</span>
+    <button class="diff" data-diff="easy">简单</button>
+    <button class="diff on" data-diff="normal">普通</button>
+    <button class="diff" data-diff="hard">困难</button>
+  </div>
+  <div class="diff-note">难度 = 词汇难度：简单 只考基础词 · 普通 加进阶词 · 困难 含拔高词</div>
+  <button class="backbtn" id="tierBack">‹ 返回</button>
+</div>
+
+<!-- ════════ LEVEL MAP ════════ -->
+<div class="screen hidden" id="mapScreen">
+  <div class="panel-title" id="mapTitle">小学 · 关卡地图</div>
+  <div class="panel-sub" id="mapSub">过关解锁下一关 · ★ 越多掌握越牢</div>
+  <div class="map-grid" id="mapGrid"></div>
+  <button class="backbtn" id="mapBack">‹ 学段</button>
 </div>
 
 <!-- ════════ GAME HUD ════════ -->
@@ -124,25 +186,35 @@ body.playing #scene{cursor:none;}
     <div class="stat">
       <div class="sl">SCORE</div>
       <div class="sv" id="scoreV">00000</div>
-      <div class="wv" id="waveV">WAVE 01</div>
+      <div class="wv" id="comboV">COMBO x0</div>
     </div>
-    <div class="rule" id="ruleBox">击落 🎯 ANIMALS 动物 · 收集 ❤ FRUITS 水果</div>
+    <div id="promptPanel">
+      <div class="pp-mode" id="ppMode">PROMPT</div>
+      <div class="pp-main" id="ppMain">—</div>
+      <div class="pp-hint" id="ppHint"></div>
+    </div>
     <div class="hpwrap">
-      <div class="hplabel"><img src="assets/sprites/heart.png" alt="hp" style="height:1.1em;vertical-align:-2px"> HULL INTEGRITY 船体完整度</div>
-      <div class="hpbar" id="hpBar"></div>
+      <div class="hplabel" id="progLabel">PROGRESS 进度</div>
+      <div class="prog" id="progBar"></div>
     </div>
   </div>
 </div>
 <div class="flash" id="flash"></div>
 
-<!-- ════════ GAME OVER ════════ -->
-<div class="screen hidden" id="overScreen">
-  <div class="over-t">GAME OVER<br>飞船损毁</div>
-  <div class="over-s" id="overScore">00000</div>
-  <div class="over-sub" id="overSub">BEST · 00000</div>
-  <button class="btn" id="retryBtn" style="border-color:var(--cyan);color:var(--cyan);text-shadow:var(--gc);box-shadow:var(--gc);">↻ RETRY / 再来一次</button>
+<!-- ════════ LEVEL RESULT ════════ -->
+<div class="screen hidden" id="resultScreen">
+  <div class="res-stars" id="resStars">★★★</div>
+  <div class="over-t" id="resTitle" style="font-size:clamp(1rem,3vw,1.8rem)">过关！</div>
+  <div class="res-line" id="resAcc">正确率 100%</div>
+  <div class="res-line" id="resMastery">掌握 100%</div>
+  <div class="res-line" id="resXp" style="color:var(--orange)">+0 XP</div>
+  <div class="btn-row">
+    <button class="btn sm" id="resRetry" style="border-color:var(--yellow);color:var(--yellow);text-shadow:var(--gy);box-shadow:var(--gy);">↻ 再练一遍</button>
+    <button class="btn sm" id="resMap">关卡地图 ›</button>
+  </div>
 </div>
 
+<script src="assets/vocab.js"></script>
 <script>
 // ═══════════════════════════════════════════════════════════
 //  AUDIO  (synthesized — same Web Audio pattern as camera-dodge-game)
@@ -418,101 +490,165 @@ function drawShip(x,y){
 }
 
 // ═══════════════════════════════════════════════════════════
-//  GAME STATE
+//  SAVE · 间隔重复 (Leitner) + 过关进度  — 脑科学内核
 // ═══════════════════════════════════════════════════════════
-const STORE='trae-space-best';
-function loadBest(){try{return parseInt(localStorage.getItem(STORE))||0;}catch(e){return 0;}}
-function saveBest(v){try{localStorage.setItem(STORE,String(v));}catch(e){}}
+const SAVE_KEY='vocab-save-v1', SCHEMA=1;
+function freshSave(){return {schemaVersion:SCHEMA,activeTier:'primary',difficulty:'normal',words:{},progress:{},stats:{xp:0,totalCorrect:0,totalWrong:0,bestCombo:0}};}
+function loadSave(){
+  let s=null;try{s=JSON.parse(localStorage.getItem(SAVE_KEY));}catch(e){}
+  if(!s){s=freshSave();try{s.stats.xp=parseInt(localStorage.getItem('trae-space-best'))||0;}catch(e){}}
+  s.words=s.words||{};s.progress=s.progress||{};s.stats=s.stats||{xp:0,totalCorrect:0,totalWrong:0,bestCombo:0};
+  return s;
+}
+let SAVE=loadSave(), saveT=0;
+function saveSoon(){saveT=0.8;}                       // debounced flush (in update)
+function flushSave(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(SAVE));}catch(e){}}
+function NOW(){return (window.__now||Date.now());}    // __now hook lets tests inject time
 
+// ── vocab access ──
+const VOCAB=window.VOCAB||{tiers:[]};
+function tierById(id){return VOCAB.tiers.find(t=>t.id===id)||VOCAB.tiers[0];}
+function activeTier(){return tierById(SAVE.activeTier);}
+function tierWords(t){const a=[];((t||activeTier()).units||[]).forEach(u=>u.words.forEach(w=>a.push(w)));return a;}
+function wordById(id){return tierWords().find(w=>w.id===id);}
+function unitOf(id){for(const u of (activeTier().units||[]))if(u.words.some(w=>w.id===id))return u;return null;}
+// ── difficulty = vocabulary level band (lvl 1 基础 / 2 进阶 / 3 拔高) ──
+const DIFF_MAX_LVL={easy:1,normal:2,hard:3};
+function diffMaxLvl(){return DIFF_MAX_LVL[SAVE.difficulty]||2;}
+function wordBandOK(w){return (w.lvl||1)<=diffMaxLvl();}                                          // 缺省 lvl=1
+// 单元内按难度取词；若该档无可选词（如全是高阶词的单元），退而取本单元「最简单的那一档」，
+// 保证非空、且 easy⊆normal⊆hard 词量单调不减。
+function unitWordsForDiff(u){
+  const ws=u.words||[]; let f=ws.filter(wordBandOK);
+  if(!f.length){let min=Infinity;ws.forEach(w=>{const L=w.lvl||1;if(L<min)min=L;});f=ws.filter(w=>(w.lvl||1)===min);}
+  return f.length?f:ws;
+}
+
+// ── Leitner spaced-repetition scheduler ──
+const BOX_INTERVAL=[0,20e3,10*60e3,24*3600e3,3*24*3600e3,10*24*3600e3], MAX_BOX=5;
+function wst(id){return SAVE.words[id]||{box:0,dueAt:0,correct:0,wrong:0,streak:0,lastMode:null,seenAt:0};}
+function isDue(id,now){const w=wst(id);return w.box===0||w.dueAt<=now;}
+function onCorrect(id,mode){const now=NOW(),w=wst(id);w.box=Math.min(MAX_BOX,w.box+1);w.correct++;w.streak++;w.lastMode=mode;w.seenAt=now;w.dueAt=now+BOX_INTERVAL[w.box];SAVE.words[id]=w;SAVE.stats.totalCorrect++;saveSoon();}
+function onWrong(id,mode){const now=NOW(),w=wst(id);w.box=Math.max(1,w.box-2);w.wrong++;w.streak=0;w.lastMode=mode;w.seenAt=now;w.dueAt=now+BOX_INTERVAL[w.box];SAVE.words[id]=w;SAVE.stats.totalWrong++;saveSoon();}
+// mode by mastery: B 英→中(易) → C 听音 → A 中→英(难); avoid repeat; fall back if audio off
+function modeForBox(b){if(b<=1)return 'B';if(b<=3)return Math.random()<0.5?'B':'C';return ['A','C','A'][Math.floor(Math.random()*3)];}
+function chooseMode(id){const w=wst(id);let m=modeForBox(w.box);if(m===w.lastMode&&Math.random()<0.6)m=(m==='B'?'C':m==='C'?'A':'B');if(audioOff&&m==='C')m=(w.box>=4?'A':'B');return m;}
+
+// ── distractors (confusable: same unit+pos / similar spelling) ──
+function editDist(a,b){const m=a.length,n=b.length,d=[];for(let i=0;i<=m;i++){d[i]=[i];for(let j=1;j<=n;j++)d[i][j]=i===0?j:0;}for(let i=1;i<=m;i++)for(let j=1;j<=n;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[m][n];}
+function pickDistractors(word,mode,k){
+  const all=tierWords(),u=unitOf(word.id);let pool=[];
+  if(word.confuse)pool=word.confuse.map(wordById).filter(Boolean);
+  if(u)pool=pool.concat(u.words.filter(w=>w.pos===word.pos&&w.id!==word.id));
+  if(mode==='A'||mode==='C')pool=pool.concat(all.filter(w=>w.id!==word.id&&editDist(w.en,word.en)<=2));
+  pool=pool.concat(all.filter(w=>w.pos===word.pos&&w.id!==word.id));
+  const seen={},out=[];for(const w of pool){if(!w||seen[w.id]||w.id===word.id||w.zh===word.zh||w.en===word.en)continue;seen[w.id]=1;out.push(w);}
+  for(let i=out.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[out[i],out[j]]=[out[j],out[i]];}
+  return out.slice(0,k);
+}
+function distractorCount(box){const base={easy:1,normal:2,hard:3}[SAVE.difficulty]||2;return Math.min(4,base+(box>=4?1:0));}
+
+// ── audio (Web Speech API — offline, no key) ──
+let voices=[],enVoice=null,audioOff=!window.speechSynthesis;
+function loadVoices(){if(!window.speechSynthesis)return;voices=speechSynthesis.getVoices()||[];enVoice=voices.find(v=>/en[-_]?us/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang))||null;audioOff=(voices.length>0&&!enVoice);}
+if(window.speechSynthesis){loadVoices();speechSynthesis.onvoiceschanged=loadVoices;}
+function speak(t){if(audioOff||!window.speechSynthesis)return;try{const u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=0.85;if(enVoice)u.voice=enVoice;speechSynthesis.cancel();speechSynthesis.speak(u);}catch(e){}}
+
+// ── runtime state ──
 let state='menu';
-let score=0,best=loadBest(),wave=1,kills=0,health=100,lastShot=0,spawnT=0;
-let panX=0,panY=0,tgtPanX=0,tgtPanY=0;
+let score=0,combo=0,lastShot=0,power=0,fireLevel=1;
 let mx=0,my=0,firing=false;
-let shipX=W/2,shipY=H*0.74;          // player craft position (WASD moves it to dodge)
-let power=0,fireLevel=1;             // collected power → firepower tier
-const enemies=[],bolts=[],parts=[],ebolts=[],blasts=[],marks=[],toasts=[];
+let shipX=W/2,shipY=H*0.74;
+const enemies=[],bolts=[],parts=[],blasts=[],marks=[],toasts=[];
+const WORDIMG={};
 const keys={};
 let flashT=0,shake=0;
+let curUnit=null,curNode=null,queue=[],qIndex=0,prompt=null,feedback=null,lvlCorrect=0,lvlWrong=0,lvlWords=[];
+function toast(x,y,text,color){toasts.push({x,y,text,color,t:0,life:1.0});}
 
-// ── 益智词汇：英语词汇分类 ──
-const WORDBANK=[
-  {en:'ANIMALS',zh:'动物',words:['cat','dog','lion','tiger','bear','wolf','fox','frog','owl','deer']},
-  {en:'FRUITS', zh:'水果',words:['apple','banana','grape','peach','lemon','mango','melon','cherry','pear','kiwi']},
-  {en:'COLORS', zh:'颜色',words:['red','blue','green','yellow','orange','purple','brown','black','white']},
-  {en:'FOOD',   zh:'食物',words:['bread','rice','soup','cake','egg','meat','milk','pizza','salad','cheese']},
-  {en:'BODY',   zh:'身体',words:['hand','foot','eye','ear','nose','arm','leg','tongue','tooth','mouth']},
-];
-// each word loads its matching OpenMoji icon (apple→🍎, cat→🐱 …)
-const WORDIMG={};
-WORDBANK.forEach(c=>c.words.forEach(w=>{const im=new Image();im.src='assets/sprites/words/'+w+'.png';WORDIMG[w]=im;}));
-let targetCat=0,bonusCat=1;
-function newRound(){
-  targetCat=Math.floor(Math.random()*WORDBANK.length);
-  do{bonusCat=Math.floor(Math.random()*WORDBANK.length);}while(bonusCat===targetCat);
-  const tc=WORDBANK[targetCat],bc=WORDBANK[bonusCat];
-  $('ruleBox').innerHTML='击落 🎯 <b class="t">'+tc.en+'</b> '+tc.zh+' &nbsp;·&nbsp; 收集 ❤ <b class="b">'+bc.en+'</b> '+bc.zh;
-}
-const roleForCat=ci=>ci===targetCat?'enemy':ci===bonusCat?'bonus':'neutral';
-function toast(x,y,text,color){toasts.push({x,y,text,color,t:0,life:0.9});}
-
-// camera/vanishing point is fixed at screen centre; enemies stream out from it
+// camera/vanishing point + ship geometry (kept)
 function vpX(){return W/2;}
 function vpY(){return H*0.5;}
-// player ship geometry
 function shipW(){return Math.min(W,H)*0.17;}
-function shipR(){return shipW()*0.5;}           // hit radius for dodging
+function shipR(){return shipW()*0.55;}
 function muzzles(){const w=shipW(),h=w*1.05;return [{x:shipX-w*0.465,y:shipY-h*0.05},{x:shipX+w*0.465,y:shipY-h*0.05}];}
 
 function reset(){
-  score=0;wave=1;kills=0;health=100;spawnT=0.6;lastShot=0;power=0;fireLevel=1;
-  panX=panY=tgtPanX=tgtPanY=0;flashT=0;shake=0;
-  enemies.length=0;bolts.length=0;parts.length=0;ebolts.length=0;blasts.length=0;marks.length=0;toasts.length=0;
+  score=0;combo=0;lastShot=0;power=0;fireLevel=1;flashT=0;shake=0;
+  enemies.length=0;bolts.length=0;parts.length=0;blasts.length=0;marks.length=0;toasts.length=0;
   shipX=W/2;shipY=H*0.74;mx=W/2;my=H*0.42;
-  newRound();
+  prompt=null;feedback=null;qIndex=0;queue.length=0;lvlCorrect=0;lvlWrong=0;
 }
 
-const ICONS=['alien','saucer','comet','satellite'];
-function spawnEnemy(){
-  const rnd=()=>Math.random();
-  // pick category by role mix: ~50% target (shoot), ~24% bonus (collect), ~26% neutral
-  let r=rnd(),ci;
-  if(r<0.50)ci=targetCat;
-  else if(r<0.74)ci=bonusCat;
-  else{do{ci=Math.floor(rnd()*WORDBANK.length);}while(ci===targetCat||ci===bonusCat);}
-  const role=roleForCat(ci),cat=WORDBANK[ci];
-  const word=cat.words[Math.floor(rnd()*cat.words.length)];
-  // varied origin: 52% zoom-in from centre, else slide in from a random screen edge
-  let sx0,sy0;
-  if(rnd()<0.52){sx0=W/2;sy0=H/2;}
-  else{const e=Math.floor(rnd()*4);
-    if(e===0){sx0=rnd()*W;sy0=-H*0.08;}
-    else if(e===1){sx0=rnd()*W;sy0=H*1.08;}
-    else if(e===2){sx0=-W*0.08;sy0=rnd()*H;}
-    else{sx0=W*1.08;sy0=rnd()*H;}
+// build interleaved prompt queue: new/weak words ×2 + due reviews across the tier
+function buildLevelQueue(unit,isBoss){
+  const now=NOW();let q=[];
+  if(isBoss){
+    q=tierWords().filter(w=>wordBandOK(w)&&wst(w.id).box>0&&isDue(w.id,now)).sort((a,b)=>wst(a.id).dueAt-wst(b.id).dueAt).slice(0,12);
+    if(!q.length)q=unit?unitWordsForDiff(unit):tierWords().filter(wordBandOK).slice(0,8);
+  }else{
+    unitWordsForDiff(unit).forEach(w=>{q.push(w);if(wst(w.id).box<2)q.push(w);});
+    const due=tierWords().filter(w=>wordBandOK(w)&&unit.words.indexOf(w)<0&&wst(w.id).box>0&&isDue(w.id,now)).sort((a,b)=>wst(a.id).dueAt-wst(b.id).dueAt).slice(0,6);
+    q=q.concat(due);
   }
-  enemies.push({
-    sx0,sy0,
-    ax:W*0.5+(rnd()*2-1)*W*0.38, ay:H*0.46+(rnd()*2-1)*H*0.34,
-    z:1, vz:0.14+wave*0.014+rnd()*0.16,                 // varied speed
-    wamp:(rnd()<0.45?0:(W*0.04+rnd()*W*0.09)), wfreq:5+rnd()*9, wphase:rnd()*6.28,  // varied weave
-    base:0.155*F, hp:role==='enemy'?(1+Math.floor(rnd()*2)):1,
-    role, word, cat:ci, icon:ICONS[Math.floor(rnd()*4)], seed:rnd()*6.28,
-    shootCd:0.9+rnd()*1.5, hitT:0,
+  for(let i=q.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[q[i],q[j]]=[q[j],q[i]];}      // shuffle
+  for(let i=1;i<q.length;i++){if(q[i].id===q[i-1].id){for(let j=i+1;j<q.length;j++){if(q[j].id!==q[i-1].id){[q[i],q[j]]=[q[j],q[i]];break;}}}}  // de-adjacent
+  return q;
+}
+
+function startLevel(node){
+  curNode=node;curUnit=node.unit;
+  tierWords().forEach(w=>{if(w.icon&&!WORDIMG[w.id]){const im=new Image();im.src='assets/sprites/words/'+w.icon+'.png';WORDIMG[w.id]=im;}});  // lazy icons
+  reset();
+  queue=buildLevelQueue(curUnit,node.boss);
+  lvlWords=node.boss?[...new Set(queue.map(w=>w.id))].map(wordById).filter(Boolean):unitWordsForDiff(curUnit);
+  state='play';document.body.classList.add('playing');show('gameScreen');
+  try{ac().resume();}catch(e){}
+  nextPrompt();
+}
+
+function nextPrompt(){
+  if(qIndex>=queue.length){levelComplete();return;}
+  const word=queue[qIndex++],mode=chooseMode(word.id);
+  const ds=pickDistractors(word,mode,distractorCount(wst(word.id).box));
+  prompt={word,mode,answerId:word.id,t:0,answered:false};
+  renderPrompt(prompt);
+  if(mode==='C')speak(word.en);
+  spawnPromptCarriers(word,ds,mode);
+}
+
+function renderPrompt(p){
+  $('ppMode').textContent={A:'中 → 英  CN→EN',B:'英 → 中  EN→CN',C:'听 音  LISTEN'}[p.mode];
+  const main=$('ppMain'),hint=$('ppHint');
+  if(p.mode==='A'){main.textContent=p.word.zh;hint.textContent='击落正确的英文单词';}
+  else if(p.mode==='B'){main.textContent=p.word.en;hint.textContent='击落正确的中文意思';}
+  else{main.innerHTML='<button class="pp-spk" id="spkBtn">🔊</button>';hint.textContent=audioOff?'音频不可用，已转文字':'听发音 · 击落听到的词';const sb=$('spkBtn');if(sb)sb.onclick=()=>speak(p.word.en);}
+}
+
+// carriers = the prompt's options (1 correct + distractors), fan in staggered
+const ICONS=['alien','saucer','comet','satellite'];
+function carrierLabel(o,mode){return mode==='B'?o.zh:o.en;}
+function spawnPromptCarriers(word,ds,mode){
+  const opts=[word,...ds];
+  for(let i=opts.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[opts[i],opts[j]]=[opts[j],opts[i]];}
+  const showIcon=(mode==='B')&&opts.every(o=>o.concrete&&o.icon);   // A/C text-only (desirable difficulty; no icon hint)
+  const dv={easy:0,normal:0.03,hard:0.06}[SAVE.difficulty]||0.03;
+  opts.forEach((o,i)=>{const rnd=Math.random;let sx0,sy0;
+    if(rnd()<0.5){sx0=W/2;sy0=H/2;}else{const e=Math.floor(rnd()*4);if(e===0){sx0=rnd()*W;sy0=-H*0.08;}else if(e===1){sx0=rnd()*W;sy0=H*1.08;}else if(e===2){sx0=-W*0.08;sy0=rnd()*H;}else{sx0=W*1.08;sy0=rnd()*H;}}
+    enemies.push({optId:o.id,isAnswer:o.id===word.id,label:carrierLabel(o,mode),icon:showIcon?o.icon:null,gIcon:ICONS[Math.floor(rnd()*4)],
+      sx0,sy0,ax:W*(0.18+0.64*((i+0.5)/opts.length)),ay:H*0.40+(rnd()*2-1)*H*0.16,
+      z:1,vz:0.085+dv+rnd()*0.05,delay:i*0.32,
+      wamp:(rnd()<0.4?0:(W*0.03+rnd()*W*0.06)),wfreq:5+rnd()*8,wphase:rnd()*6.28,
+      base:0.16*F,seed:rnd()*6.28,hitT:0});
   });
 }
 
-// enemy screen state: lerp start→arrival (ease-in), plus perpendicular weave that grows as it nears
+// enemy screen state (kept) — z held at 1 until spawn delay elapses
 function eScreen(e){
-  const t=1-e.z, k=t*t;
+  const t=Math.max(0,1-e.z),k=t*t;
   let sx=e.sx0+(e.ax-e.sx0)*k, sy=e.sy0+(e.ay-e.sy0)*k;
-  if(e.wamp){const ang=Math.atan2(e.ay-e.sy0,e.ax-e.sx0)+Math.PI/2,w=Math.sin(t*e.wfreq+e.wphase)*e.wamp*t;
-    sx+=Math.cos(ang)*w;sy+=Math.sin(ang)*w;}
-  return {sx,sy,size:Math.max(PX*3,e.base*(0.22+1.7*t))};
-}
-// enemy-bolt screen state: streams from where it was fired toward the ship's position at fire time
-function bScreen(b){
-  const t=1-b.z, k=t*t;
-  return {sx:b.sx0+(b.ax-b.sx0)*k, sy:b.sy0+(b.ay-b.sy0)*k, size:Math.max(PX*2, b.base*(0.3+1.7*t))};
+  if(e.wamp){const ang=Math.atan2(e.ay-e.sy0,e.ax-e.sx0)+Math.PI/2,w=Math.sin(t*e.wfreq+e.wphase)*e.wamp*t;sx+=Math.cos(ang)*w;sy+=Math.sin(ang)*w;}
+  return {sx,sy,size:Math.max(PX*3,e.base*(0.30+1.5*t))};
 }
 const dist2=(ax,ay,bx,by)=>{const dx=ax-bx,dy=ay-by;return dx*dx+dy*dy;};
 function spark(x,y,c,n){for(let i=0;i<(n||6);i++){const a=Math.random()*6.28,sp=(1+Math.random()*4)*PX*9;parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:0.18+Math.random()*0.25,t:0,c});}}
@@ -537,101 +673,74 @@ function explode(sx,sy,color,size){
     parts.push({x:sx,y:sy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,life:0.5+Math.random()*0.4,t:0,c:color});}
 }
 
+const pending=[];                                  // deterministic timers (testable, no setTimeout)
+function schedule(fn,delay){pending.push({fn,t:delay});}
+function clearCarriers(){enemies.length=0;}
+function showFeedback(word){feedback={word,t:0,life:1.6};speak(word.en);}
+
 function fire(){
-  if(state!=='play')return;
-  const cd=Math.max(75,140-(fireLevel-1)*22);
-  const n=Date.now();if(n-lastShot<cd)return;lastShot=n;
+  if(state!=='play'||!prompt||prompt.answered)return;
+  const cd=Math.max(80,150-(fireLevel-1)*20);
+  const n=NOW();if(n-lastShot<cd)return;lastShot=n;
   sfxLaser();
   const tx=mx,ty=my;
-  // tracer bolts from gun muzzles → crosshair (extra centre bolt at higher firepower)
   let ms=muzzles(); if(fireLevel>=3)ms=ms.concat([{x:shipX,y:shipY-shipW()*0.58}]);
   ms.forEach(m=>bolts.push({x0:m.x,y0:m.y,x1:tx,y1:ty,t:0}));
-  // 1) shoot down an incoming enemy bolt under the crosshair
-  for(let i=ebolts.length-1;i>=0;i--){const s=bScreen(ebolts[i]);
-    if(dist2(tx,ty,s.sx,s.sy) < Math.pow(Math.max(PX*9,s.size*0.9),2)){
-      ebolts.splice(i,1);score+=30;spark(s.sx,s.sy,'#ff8800',8);mark(tx,ty);return;
-    }
-  }
-  // 2) nearest carrier under the crosshair
-  let hit=-1,hz=1e9;const hb=1+(fireLevel-1)*0.05;
-  for(let i=0;i<enemies.length;i++){const e=enemies[i];const s=eScreen(e);
-    const h=s.size*0.5*hb;
-    if(Math.abs(tx-s.sx)<h&&Math.abs(ty-s.sy)<h&&e.z<hz){hz=e.z;hit=i;}
-  }
+  // nearest launched carrier under the crosshair (z<1 = already moving)
+  let hit=-1,hz=1e9;
+  for(let i=0;i<enemies.length;i++){const e=enemies[i];if(e.z>=1)continue;const s=eScreen(e);const h=s.size*0.6;
+    if(Math.abs(tx-s.sx)<h&&Math.abs(ty-s.sy)<h&&e.z<hz){hz=e.z;hit=i;}}
   if(hit<0)return;
   const e=enemies[hit],s=eScreen(e);mark(tx,ty);
-  if(e.role==='enemy'){                       // correct target → shoot it
-    e.hp--;e.hitT=0.12;spark(s.sx,s.sy,'#ffee00');
-    if(e.hp<=0){const pts=100+wave*10;score+=pts;kills++;explode(s.sx,s.sy,'#ffcc33',s.size);
-      toast(s.sx,s.sy-s.size*0.5,'+'+pts,'#00ff88');enemies.splice(hit,1);
-      if(kills%8===0){wave++;newRound();toast(W/2,H*0.3,'NEW RULE 新规则','#ffee00');}
-    }
-  } else if(e.role==='bonus'){                 // WRONG: you destroyed a power-up word
-    score=Math.max(0,score-50);explode(s.sx,s.sy,'#7788aa',s.size*0.8);
-    toast(s.sx,s.sy-s.size*0.5,'✗ 该收集! -50','#ff4466');enemies.splice(hit,1);
-  } else {                                     // WRONG: neutral word, not the target
-    score=Math.max(0,score-15);spark(s.sx,s.sy,'#888',8);
-    toast(s.sx,s.sy-s.size*0.5,'✗ -15','#ffaa00');enemies.splice(hit,1);
-  }
+  if(e.isAnswer) answerCorrect(s);
+  else { spark(s.sx,s.sy,'#ff5566',8); enemies.splice(hit,1); answerWrong(); }
+}
+function answerCorrect(s){
+  onCorrect(prompt.word.id,prompt.mode);
+  lvlCorrect++;combo++;if(combo>SAVE.stats.bestCombo)SAVE.stats.bestCombo=combo;
+  const pts=100+combo*10;score+=pts;SAVE.stats.xp+=10;saveSoon();
+  explode(s.sx,s.sy,'#ffcc33',s.size);sfxPower();
+  toast(s.sx,s.sy-s.size*0.6,'✓ +'+pts,'#00ff88');
+  prompt.answered=true;clearCarriers();schedule(nextPrompt,0.45);
+}
+function answerWrong(){
+  onWrong(prompt.word.id,prompt.mode);
+  lvlWrong++;combo=0;score=Math.max(0,score-20);saveSoon();
+  sfxHurt();flashT=0.3;shake=PX*8;
+  showFeedback(prompt.word);
+  prompt.answered=true;clearCarriers();schedule(nextPrompt,1.6);
 }
 
-function hurt(dmg){health-=dmg;flashT=0.4;shake=PX*11;sfxHurt();if(health<=0){health=0;gameOver();return true;}return false;}
-
 function update(dt){
-  // ── ship movement (WASD / arrows) → dodge ──
+  // ── ship movement (WASD / arrows) — engagement only, no damage ──
   const mvx=((keys['d']||keys['arrowright'])?1:0)-((keys['a']||keys['arrowleft'])?1:0);
   const mvy=((keys['s']||keys['arrowdown'])?1:0)-((keys['w']||keys['arrowup'])?1:0);
-  const sp=Math.min(W,H)*0.95*dt;
+  const sp=Math.min(W,H)*0.9*dt;
   shipX+=mvx*sp;shipY+=mvy*sp;
   const m=shipW()*0.55;
-  shipX=Math.max(m,Math.min(W-m,shipX));
-  shipY=Math.max(H*0.40,Math.min(H-m,shipY));
+  shipX=Math.max(m,Math.min(W-m,shipX));shipY=Math.max(H*0.40,Math.min(H-m,shipY));
   if(firing)fire();
-  // spawn
-  spawnT-=dt;
-  if(spawnT<=0){spawnEnemy();spawnT=Math.max(0.45,1.2-wave*0.055);}
-  // carriers approach + only TARGET-word ones shoot at you
+  // deterministic timers (nextPrompt etc.)
+  for(let i=pending.length-1;i>=0;i--){pending[i].t-=dt;if(pending[i].t<=0){const fn=pending[i].fn;pending.splice(i,1);fn();}}
+  // carriers approach after their launch delay; the correct one passing un-shot = a miss
+  let missed=false;
   for(let i=enemies.length-1;i>=0;i--){const e=enemies[i];
+    if(e.delay>0){e.delay-=dt;continue;}
     e.z-=e.vz*dt;if(e.hitT>0)e.hitT-=dt;
-    if(e.role==='enemy' && e.z<0.78 && e.z>0.18){e.shootCd-=dt;
-      if(e.shootCd<=0){e.shootCd=1.0+Math.random()*1.5;
-        const s=eScreen(e);
-        ebolts.push({sx0:s.sx,sy0:s.sy,ax:shipX,ay:shipY,z:1,vz:0.45+wave*0.03,base:Math.min(W,H)*0.022,seed:Math.random()*6.28});
-      }
-    }
-    if(e.z<=0){ // reached camera plane
-      const s=eScreen(e),onShip=dist2(s.sx,s.sy,shipX,shipY) < Math.pow(shipR()+e.base*0.95,2);
-      enemies.splice(i,1);
-      if(e.role==='enemy'){ if(onShip){toast(shipX,shipY-shipW()*0.5,'-14','#ff4466');if(hurt(14))return;} }
-      else if(e.role==='bonus' && onShip){ // collected a power-up word → heal + firepower
-        health=Math.min(100,health+12);power++;
-        if(power%2===0)fireLevel=Math.min(4,fireLevel+1);
-        sfxPower();
-        spark(shipX,shipY,'#00ff88',12);
-        toast(shipX,shipY-shipW()*0.6, power%2===0?'❤+12  ⚡升级!':'❤+12','#00ff88');
-      }
-      // neutral: harmless, no effect
-    }
+    if(e.z<=0){const wasAnswer=e.isAnswer;enemies.splice(i,1);
+      if(wasAnswer&&prompt&&!prompt.answered){missed=true;break;}}
   }
-  // enemy bolts incoming
-  for(let i=ebolts.length-1;i>=0;i--){const b=ebolts[i];b.z-=b.vz*dt;
-    if(b.z<=0){const onShip=dist2(b.ax,b.ay,shipX,shipY) < Math.pow(shipR(),2);
-      ebolts.splice(i,1);
-      if(onShip){if(hurt(8))return;}
-    }
-  }
-  // player tracer bolts (fast, life ~0.14s)
+  if(missed)answerWrong();
+  if(feedback){feedback.t+=dt;if(feedback.t>=feedback.life)feedback=null;}
+  // player tracer bolts
   for(let i=bolts.length-1;i>=0;i--){bolts[i].t+=dt/0.14;if(bolts[i].t>=1)bolts.splice(i,1);}
-  // hit markers
   for(let i=marks.length-1;i>=0;i--){marks[i].t+=dt;if(marks[i].t>=marks[i].life)marks.splice(i,1);}
-  // floating score/feedback toasts
   for(let i=toasts.length-1;i>=0;i--){const tt=toasts[i];tt.t+=dt;tt.y-=PX*8*dt;if(tt.t>=tt.life)toasts.splice(i,1);}
-  // particles
   for(let i=parts.length-1;i>=0;i--){const p=parts[i];p.t+=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=PX*30*dt;if(p.t>=p.life)parts.splice(i,1);}
-  // explosion bursts
   for(let i=blasts.length-1;i>=0;i--){blasts[i].t+=dt;if(blasts[i].t>=blasts[i].life)blasts.splice(i,1);}
   if(flashT>0)flashT-=dt;
-  if(shake>0)shake-=PX*40*dt;if(shake<0)shake=0;
+  if(shake>0){shake-=PX*40*dt;if(shake<0)shake=0;}
+  if(saveT>0){saveT-=dt;if(saveT<=0)flushSave();}
 }
 
 function render(){
@@ -640,35 +749,17 @@ function render(){
   ctx.save();ctx.translate(sx0,sy0);
   const cx=vpX(),cy=vpY();
   drawScene(cx,cy);
-  // word carriers (far→near): icon + glow + the WORD label (read it to decide its category!)
+  // word carriers (far→near): ship/icon + glow + the option LABEL (the answer to read)
   const list=enemies.slice().sort((a,b)=>b.z-a.z);
-  for(const e of list){const s=eScreen(e);
+  for(const e of list){if(e.delay>0)continue;const s=eScreen(e);
     if(s.sx<-s.size||s.sx>W+s.size||s.sy<-s.size||s.sy>H+s.size)continue;
     const pulse=0.22+0.12*Math.sin(T*5+e.seed);
-    // subtle uniform glow so role isn't given away by colour — the puzzle is reading the word
-    drawGlow(s.sx,s.sy,s.size*0.8,'rgba(0,245,255,'+pulse.toFixed(3)+')');
+    drawGlow(s.sx,s.sy,s.size*0.85,'rgba(0,245,255,'+pulse.toFixed(3)+')');
     const bob=Math.sin(T*1.5+e.seed)*0.10;
-    if(!drawIcon(WORDIMG[e.word],s.sx,s.sy,s.size*1.25,bob)) drawIcon(IMG[e.icon],s.sx,s.sy,s.size*1.25,bob);
+    const wim=e.icon?WORDIMG[e.optId]:null;                    // icon only in mode B (else text-only)
+    if(!drawIcon(wim,s.sx,s.sy,s.size*1.2,bob)) drawIcon(IMG[e.gIcon],s.sx,s.sy,s.size*1.2,bob);
     if(e.hitT>0)drawGlow(s.sx,s.sy,s.size*0.6,'rgba(255,255,255,'+(0.55*e.hitT/0.12).toFixed(3)+')');
-    if(s.size>PX*7) drawWordLabel(s.sx,s.sy+s.size*0.72,e.word,s.size);
-  }
-  // incoming enemy fire — a small ELONGATED energy bolt aimed along its travel direction
-  if(state==='play'){
-    for(const b of ebolts){const s=bScreen(b),sz=s.size;
-      let dx=s.sx-b.sx0,dy=s.sy-b.sy0;const d=Math.hypot(dx,dy)||1;dx/=d;dy/=d;
-      const ang=Math.atan2(dy,dx),pl=0.85+0.15*Math.sin(T*30+b.seed*10);
-      drawGlow(s.sx,s.sy,sz*1.4*pl,'rgba(255,70,40,0.42)');     // soft modest glow
-      ctx.save();ctx.translate(s.sx,s.sy);ctx.rotate(ang);
-      // tapered tail behind the bolt
-      const g=ctx.createLinearGradient(-sz*2.6,0,0,0);
-      g.addColorStop(0,'rgba(255,90,40,0)');g.addColorStop(1,'rgba(255,150,60,.7)');
-      ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(-sz*2.6,0);ctx.lineTo(0,-sz*0.30);ctx.lineTo(0,sz*0.30);ctx.closePath();ctx.fill();
-      // elongated bolt head: stretched along the travel axis (capsule, not a big ball)
-      ctx.fillStyle='#e22515';ctx.beginPath();ctx.ellipse(0,0,sz*0.95,sz*0.4,0,0,6.283);ctx.fill();
-      ctx.fillStyle='#ff8a36';ctx.beginPath();ctx.ellipse(sz*0.12,0,sz*0.6,sz*0.26,0,0,6.283);ctx.fill();
-      ctx.fillStyle='#fff2c0';ctx.beginPath();ctx.ellipse(sz*0.22,0,sz*0.32,sz*0.15,0,0,6.283);ctx.fill();
-      ctx.restore();
-    }
+    if(s.size>PX*6) drawWordLabel(s.sx,s.sy+s.size*0.78,e.label,s.size);
   }
   // particles
   for(const p of parts){ctx.globalAlpha=Math.max(0,1-p.t/p.life);ctx.fillStyle=p.c;ctx.fillRect(snap(p.x),snap(p.y),PX*2,PX*2);}
@@ -702,6 +793,20 @@ function render(){
     // floating feedback toasts (+score / ✗ / ❤+12)
     for(const tt of toasts){ctx.globalAlpha=Math.max(0,1-tt.t/tt.life);drawText(tt.x,tt.y,tt.text,Math.max(16,shipW()*0.16),tt.color);}
     ctx.globalAlpha=1;
+    // corrective feedback card — shows the correct EN+ZH(+icon) immediately after an error
+    if(feedback){const wd=feedback.word,fy=H*0.40;
+      ctx.globalAlpha=Math.max(0,Math.min(1,(feedback.life-feedback.t)/0.3));
+      const cw=Math.min(W*0.62,560*DPR),chh=shipW()*1.1;
+      ctx.fillStyle='rgba(8,5,18,0.86)';ctx.fillRect(W/2-cw/2,fy-chh/2,cw,chh);
+      ctx.strokeStyle='rgba(255,90,110,.7)';ctx.lineWidth=Math.max(2,PX*0.6);ctx.strokeRect(W/2-cw/2,fy-chh/2,cw,chh);
+      drawText(W/2,fy-chh*0.36,'正确答案 ✗',PX*7,'#ff6688');
+      const hasIcon=wd.icon&&WORDIMG[wd.id];
+      if(hasIcon)drawIcon(WORDIMG[wd.id],W/2-cw*0.30,fy+chh*0.05,chh*0.5);
+      const ex=hasIcon?W/2+cw*0.06:W/2;
+      drawText(ex,fy-chh*0.02,wd.en,shipW()*0.22,'#ffee00');
+      drawText(ex,fy+chh*0.26,wd.zh,shipW()*0.18,'#eaffff');
+      ctx.globalAlpha=1;
+    }
     // crosshair reticle
     drawReticle(snap(mx),snap(my));
   }
@@ -711,15 +816,17 @@ function render(){
 // ═══════════════════════════════════════════════════════════
 //  HUD UPDATE
 // ═══════════════════════════════════════════════════════════
-const hpBar=$('hpBar');
-(function buildHp(){for(let i=0;i<10;i++){const d=document.createElement('div');d.className='seg';hpBar.appendChild(d);}})();
-const segs=[...hpBar.children];
+const progBar=$('progBar');
 function pad(n){return String(n).padStart(5,'0');}
 function syncHud(){
   $('scoreV').textContent=pad(score);
-  $('waveV').textContent='WAVE '+String(wave).padStart(2,'0')+'  ⚡LV'+fireLevel;
-  const on=Math.round(health/10);
-  segs.forEach((s,i)=>{s.className='seg'+(i<on?' on':'')+(on<=3&&i<on?' low':'');});
+  $('comboV').textContent=combo>1?('COMBO x'+combo):('⚡ LV'+fireLevel);
+  const total=queue.length||1, cur=Math.max(0,qIndex-1);
+  if(progBar._t!==total||progBar._c!==cur){progBar._t=total;progBar._c=cur;
+    let html='';for(let i=0;i<total;i++)html+='<div class="pseg'+(i<cur?' done':i===cur?' cur':'')+'"></div>';
+    progBar.innerHTML=html;
+    $('progLabel').textContent=(curUnit?curUnit.name:'')+'   '+Math.min(cur+1,total)+' / '+total;
+  }
   $('flash').style.opacity=flashT>0?(flashT/0.35*0.5):0;
 }
 
@@ -740,19 +847,62 @@ requestAnimationFrame(loop);
 // ═══════════════════════════════════════════════════════════
 //  FLOW
 // ═══════════════════════════════════════════════════════════
-function startGame(){try{ac().resume();}catch(e){}reset();state='play';document.body.classList.add('playing');show('gameScreen');}
-function gameOver(){
-  state='over';document.body.classList.remove('playing');sfxOver();
-  const isNew=score>best;if(isNew){best=score;saveBest(best);}
-  $('overScore').textContent=pad(score);
-  $('overSub').innerHTML=isNew?'<span class="over-new">★ NEW BEST! 新纪录 ★</span>':('BEST · '+pad(best));
-  show('overScreen');
+function toMenu(){state='menu';document.body.classList.remove('playing');$('bestLine').textContent='XP · '+SAVE.stats.xp;show('startScreen');}
+function showTier(){state='menu';document.body.classList.remove('playing');buildTierScreen();show('tierScreen');}
+function buildTierScreen(){
+  const g=$('tierGrid');g.innerHTML='';
+  (VOCAB.tiers||[]).forEach(t=>{
+    const cleared=(t.units||[]).filter(u=>SAVE.progress[u.id]&&SAVE.progress[u.id].cleared).length;
+    const d=document.createElement('div');d.className='tier-card';
+    d.innerHTML='<div class="tn">'+t.name+'</div><div class="te">'+t.en+'</div><div class="td">'+(t.desc||'')+'<br>单元 '+(t.units?t.units.length:0)+' · 已过关 '+cleared+'</div>';
+    d.onclick=()=>{SAVE.activeTier=t.id;saveSoon();showMap();};g.appendChild(d);
+  });
+  document.querySelectorAll('#tierScreen .diff').forEach(b=>{b.classList.toggle('on',b.dataset.diff===SAVE.difficulty);b.onclick=()=>{SAVE.difficulty=b.dataset.diff;saveSoon();buildTierScreen();};});
 }
-function toMenu(){state='menu';document.body.classList.remove('playing');$('bestLine').textContent='BEST · '+pad(best);show('startScreen');}
-
-$('startBtn').addEventListener('click',startGame);
-$('retryBtn').addEventListener('click',startGame);
-$('bestLine').textContent='BEST · '+pad(best);
+// map nodes = units + a review-boss every 4 units
+function mapNodes(){const t=activeTier(),nodes=[];let c=0;
+  (t.units||[]).forEach((u,i)=>{nodes.push({type:'unit',unit:u,boss:false,id:u.id,name:u.name});
+    if(++c%4===0)nodes.push({type:'boss',unit:u,boss:true,id:'boss-'+t.id+'-'+i,name:'复习关'});});
+  return nodes;
+}
+function nodeUnlocked(nodes,i){if(i===0)return true;const prev=nodes[i-1];if(prev.boss)return true;return !!(SAVE.progress[prev.id]&&SAVE.progress[prev.id].cleared);}
+function showMap(){
+  state='menu';document.body.classList.remove('playing');
+  $('mapTitle').textContent=activeTier().name+' · 关卡地图';
+  const nodes=mapNodes(),g=$('mapGrid');g.innerHTML='';
+  nodes.forEach((nd,i)=>{
+    const unlocked=nodeUnlocked(nodes,i),pr=SAVE.progress[nd.id]||{},stars=pr.stars||0;
+    const el=document.createElement('div');el.className='node'+(nd.boss?' boss':'')+(unlocked?'':' locked');
+    const starStr=unlocked?('★★★'.slice(0,stars)+'☆☆☆'.slice(0,3-stars)):'🔒';
+    el.innerHTML='<div class="nidx">'+(nd.boss?'BOSS':('U'+String(i+1).padStart(2,'0')))+'</div><div class="nname">'+nd.name+'</div><div class="nstars">'+starStr+'</div>';
+    if(unlocked)el.onclick=()=>startLevel(nd);
+    g.appendChild(el);
+  });
+  show('mapScreen');
+}
+function levelComplete(){
+  state='result';document.body.classList.remove('playing');prompt=null;
+  const acc=(lvlCorrect+lvlWrong)>0?lvlCorrect/(lvlCorrect+lvlWrong):0;
+  const learned=lvlWords.filter(w=>wst(w.id).box>=2).length, mastery=lvlWords.length?learned/lvlWords.length:0;
+  const hasZero=lvlWords.some(w=>wst(w.id).box===0), cleared=mastery>=0.8&&!hasZero;
+  let stars=0;if(cleared){stars=(acc>=0.92&&mastery>=0.95)?3:(acc>=0.8&&mastery>=0.85)?2:1;}
+  const xpGain=lvlCorrect*10+stars*30+(cleared?20:0);SAVE.stats.xp+=xpGain;
+  if(!curNode.boss){const p=SAVE.progress[curNode.id]||{stars:0,cleared:false,bestMastery:0};
+    p.stars=Math.max(p.stars||0,stars);p.cleared=p.cleared||cleared;p.bestMastery=Math.max(p.bestMastery||0,mastery);SAVE.progress[curNode.id]=p;}
+  flushSave();
+  $('resStars').textContent=cleared?('★★★'.slice(0,stars)+'☆☆☆'.slice(0,3-stars)):'☆☆☆';
+  $('resTitle').textContent=cleared?'过关！ CLEARED':'未过关 · 再来一次';
+  $('resTitle').style.color=cleared?'var(--green)':'var(--red)';
+  $('resAcc').textContent='正确率 '+Math.round(acc*100)+'%';
+  $('resMastery').textContent='掌握 '+Math.round(mastery*100)+'%';
+  $('resXp').textContent='+'+xpGain+' XP';
+  show('resultScreen');
+}
+$('startBtn').addEventListener('click',showTier);
+$('tierBack').addEventListener('click',toMenu);
+$('mapBack').addEventListener('click',showTier);
+$('resRetry').addEventListener('click',()=>startLevel(curNode));
+$('resMap').addEventListener('click',showMap);
 
 // ── input ──
 function setAim(clientX,clientY){mx=clientX*DPR;my=clientY*DPR;}
